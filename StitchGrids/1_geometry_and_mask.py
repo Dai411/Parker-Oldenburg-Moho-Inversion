@@ -49,8 +49,8 @@ def write_asc_grid(filename, data, header):
 
 def align_sea_to_land_grid(sea_data, sea_header, land_header):
     """
-    将 Sea 网格对齐到 Land 的网格尺寸和坐标
-    返回：aligned_sea (Land 尺寸)
+    Align Coordinates and Size from Sea Raster to Land Raster
+    Return：aligned_sea (Using Land Size)
     """
     land_nrows = land_header['nrows']
     land_ncols = land_header['ncols']
@@ -83,51 +83,51 @@ def align_sea_to_land_grid(sea_data, sea_header, land_header):
     
     return aligned
 
-# ===== 主程序 =====
+# ===== Main =====
 print("=" * 60)
-print("Step 1: Geometry Setup and Priority Masking (文档2 Step 1)")
+print("Step 1: Geometry Setup and Priority Masking ")
 print("=" * 60)
 
-# 1. 读取头文件
-print("\n1. 读取头文件...")
+# 1. Read Header Info.
+print("\n1. Read Header from .asc Files...")
 land_header = read_asc_header(land_file)
 sea_header = read_asc_header(sea_file)
 
-print(f"   Land 网格: {land_header['ncols']} x {land_header['nrows']}")
-print(f"   Sea 网格:  {sea_header['ncols']} x {sea_header['nrows']}")
-print(f"   cellsize: {land_header['cellsize']} m (一致)")
+print(f"   Land Grid: {land_header['ncols']} x {land_header['nrows']}")
+print(f"   Sea Grid:  {sea_header['ncols']} x {sea_header['nrows']}")
+print(f"   cellsize: {land_header['cellsize']} m (Identical)")
 
-# 2. 读取原始数据
-print("\n2. 读取原始重力数据...")
+# 2. Read Original Data
+print("\n2. Read Original Gravity Data...")
 land_data = read_asc_grid(land_file, land_header)
 sea_data = read_asc_grid(sea_file, sea_header)
-print(f"   Land 有效点: {np.sum(~np.isnan(land_data))}")
-print(f"   Sea 有效点:  {np.sum(~np.isnan(sea_data))}")
+print(f"   Land Valid Points: {np.sum(~np.isnan(land_data))}")
+print(f"   Sea Valid Points:  {np.sum(~np.isnan(sea_data))}")
 
-# 3. 将 Sea 对齐到 Land 网格（定义全局域 Ω）
-print("\n3. 对齐 Sea 到 Land 网格 (定义全局域 Ω)...")
+# 3. Aligh Sea Grid to Land Grid
+print("\n3. Align Sea to Land Grids (Define Global Domain Ω)...")
 sea_aligned = align_sea_to_land_grid(sea_data, sea_header, land_header)
 
-# 4. 创建优先级掩码 m(x,y) - 公式 (11)
-print("\n4. 创建优先级掩码 m(x,y) - 公式 (11)...")
-print("   规则: Sea 优先 (mask=1), Land 填充 (mask=0), 无数据 (mask=NaN)")
+# 4. Build Preferetial Mask m(x,y) - Equation (11)
+print("\n4. Build Priority Mask m(x,y)")
+print("   Rule: Sea Prefered (mask=1), Land Filled (mask=0), Null (mask=NaN)")
 
 mask = np.full_like(land_data, np.nan, dtype=np.float32)
 
-# 条件 1: (x,y) ∈ Sea 网格 → mask = 1
+# Condition 1: (x,y) ∈ Sea Grid → mask = 1
 mask[~np.isnan(sea_aligned)] = 1.0
 
-# 条件 2: (x,y) ∈ Land 网格 且 Sea 为 NaN → mask = 0
+# Condition 2: (x,y) ∈ Land Grid 且 Sea 为 NaN → mask = 0
 mask[(~np.isnan(land_data)) & np.isnan(sea_aligned)] = 0.0
 
-# 条件 3: 其他 → mask = NaN (已经初始化为 NaN)
+# Condition 3: Other → mask = NaN (Already initialized as NaN)
 
-print(f"   mask=1 (Sea 优先区域): {np.sum(mask == 1):,}")
-print(f"   mask=0 (Land 填充区域): {np.sum(mask == 0):,}")
-print(f"   mask=NaN (无数据区域): {np.sum(np.isnan(mask)):,}")
+print(f"   mask=1 (Sea Prefered): {np.sum(mask == 1):,}")
+print(f"   mask=0 (Land Filled Region): {np.sum(mask == 0):,}")
+print(f"   mask=NaN (NoData): {np.sum(np.isnan(mask)):,}")
 
-# 5. 创建初始复合场 g0(x,y) - 公式 (12)
-print("\n5. 创建初始复合场 g0(x,y) - 公式 (12)...")
+# 5. Build Initial Composite filed g0(x,y) - Equation (12)
+print("\n5. Build Initial Composite Gravity Field g0(x,y)")
 g0 = np.full_like(land_data, np.nan)
 
 # g0 = g_sea if mask = 1
