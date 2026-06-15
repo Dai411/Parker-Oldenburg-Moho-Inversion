@@ -9,7 +9,7 @@ output_dir = 'C:/.../BouguerAnomaly/StitchGrids'
 # =========================
 
 def read_asc_header(filename):
-    """读取 ESRI ASCII 栅格文件头"""
+    """Read ESRI ASCII Rater Header"""
     with open(filename, 'r') as f:
         header = {}
         for _ in range(6):
@@ -23,7 +23,7 @@ def read_asc_header(filename):
     return header
 
 def read_asc_grid(filename, header=None):
-    """读取 ESRI ASCII 栅格文件的数据部分"""
+    """Read ESRI ASCII Raster Data"""
     if header is None:
         header = read_asc_header(filename)
     data = np.loadtxt(filename, skiprows=6)
@@ -32,7 +32,7 @@ def read_asc_grid(filename, header=None):
     return data
 
 def write_asc_grid(filename, data, header):
-    """将数据写入 ESRI ASCII 栅格文件"""
+    """Write data into ESRI ASCII raster"""
     output_data = data.copy()
     output_data[np.isnan(output_data)] = header['nodata_value']
     
