@@ -2,12 +2,12 @@ import numpy as np
 import os
 from scipy.signal import convolve2d
 
-# ===== Set Path =====
+# ===== Set File Path =====
 data_dir = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly'
 land_file = os.path.join(data_dir, 'BouguerLandGrid.asc')
 sea_file = os.path.join(data_dir, 'BouguerSeaGrid.asc')
 output_dir = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly/StitchGrids'
-# ====================
+# =========================
 
 def read_asc_header(filename):
     with open(filename, 'r') as f:
