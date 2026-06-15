@@ -1,7 +1,7 @@
 import numpy as np
 
 def read_asc_header(filename):
-    """Read ESRI ASCII Grid Header"""
+    """Read ESRI ASCII Raster Header"""
     with open(filename, 'r') as f:
         header = {}
         for _ in range(6):
