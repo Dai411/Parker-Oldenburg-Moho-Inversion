@@ -11,9 +11,9 @@ def read_asc_header(filename):
             header[key] = value
     return header
 
-# 读取两个文件的头信息
-land_header = read_asc_header('C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly/BouguerLandGrid.asc')
-sea_header = read_asc_header('C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly/BouguerSeaGrid.asc')
+# Read Header info. from Land and Sea files
+land_header = read_asc_header('C:/.../BouguerAnomaly/BouguerLandGrid.asc')
+sea_header = read_asc_header('C:/..../BouguerAnomaly/BouguerSeaGrid.asc')
 
 print("=== BouguerLandGrid.asc ===")
 for k, v in land_header.items():
@@ -23,7 +23,7 @@ print("\n=== BouguerSeaGrid.asc ===")
 for k, v in sea_header.items():
     print(f"  {k}: {v}")
 
-# 计算实际边界
+# Calculte late the Edge of .asc files
 land_xmin = land_header['xllcorner']
 land_xmax = land_header['xllcorner'] + land_header['ncols'] * land_header['cellsize']
 land_ymin = land_header['yllcorner']
@@ -34,19 +34,19 @@ sea_xmax = sea_header['xllcorner'] + sea_header['ncols'] * sea_header['cellsize'
 sea_ymin = sea_header['yllcorner']
 sea_ymax = sea_header['yllcorner'] + sea_header['nrows'] * sea_header['cellsize']
 
-print("\n=== 空间范围 ===")
+print("\n=== Space Dimensions ===")
 print(f"Land: X [{land_xmin:.0f}, {land_xmax:.0f}], Y [{land_ymin:.0f}, {land_ymax:.0f}]")
 print(f"Sea:  X [{sea_xmin:.0f}, {sea_xmax:.0f}], Y [{sea_ymin:.0f}, {sea_ymax:.0f}]")
 
-# 检查重叠
+# Check the overlapped area
 overlap_xmin = max(land_xmin, sea_xmin)
 overlap_xmax = min(land_xmax, sea_xmax)
 overlap_ymin = max(land_ymin, sea_ymin)
 overlap_ymax = min(land_ymax, sea_ymax)
 
-print(f"\n重叠区: X [{overlap_xmin:.0f}, {overlap_xmax:.0f}], Y [{overlap_ymin:.0f}, {overlap_ymax:.0f}]")
+print(f"\nOverlapped Zone: X [{overlap_xmin:.0f}, {overlap_xmax:.0f}], Y [{overlap_ymin:.0f}, {overlap_ymax:.0f}]")
 
 if overlap_xmax > overlap_xmin and overlap_ymax > overlap_ymin:
-    print("✓ 两个网格存在重叠")
+    print("✓ Two grids has overlapped zone")
 else:
-    print("✗ 两个网格不存在重叠")
+    print("✗ Two grids does not have overlapped zone")
