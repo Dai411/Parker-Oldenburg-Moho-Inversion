@@ -138,28 +138,28 @@ g0[mask == 0] = land_data[mask == 0]
 
 # g0 = NaN elsewhere (already)
 
-print(f"   g0 有效点: {np.sum(~np.isnan(g0)):,}")
+print(f"   g0 Valid Points (Grids): {np.sum(~np.isnan(g0)):,}")
 
-# 6. 保存结果
-print("\n6. 保存中间结果...")
+# 6. Save 
+print("\n6. Save Middle Files...")
 
-# 保存优先级掩码
+# Save Priority Mask
 mask_file = os.path.join(output_dir, 'PriorityMask.asc')
 write_asc_grid(mask_file, mask, land_header)
-print(f"   ✓ 优先级掩码: {mask_file}")
+print(f"   ✓ Priority Mask: {mask_file}")
 
-# 保存初始复合场（仅用于可视化，不用于后续合并）
+# Save Initial Composite Field (Used only for visualization, no for following merging）
 g0_file = os.path.join(output_dir, 'InitialComposite_g0.asc')
 write_asc_grid(g0_file, g0, land_header)
-print(f"   ✓ 初始复合场 g0: {g0_file}")
+print(f"   ✓ Initial Composite Field g0: {g0_file}")
 
-# 保存对齐后的 Sea 数据（供后续步骤使用）
+# Save Aligned Sea Data (For folloing steps)）
 sea_aligned_file = os.path.join(output_dir, 'Sea_Aligned_To_LandGrid.asc')
 write_asc_grid(sea_aligned_file, sea_aligned, land_header)
 print(f"   ✓ Sea 对齐数据: {sea_aligned_file}")
 
-# 7. 统计信息（识别间隙）
-print("\n7. 间隙分析 (Ω_gap)...")
+# 7. Static（Identify and analyse GAP）
+print("\n7. Gap Analysis (Ω_gap)...")
 # 间隙区域：mask 有效但 g0 无效？实际上，根据文档，间隙是在 Laplacian 合并时
 # 由于 stencil 边界产生的 NaN 区域。这里先记录有效边界。
 
