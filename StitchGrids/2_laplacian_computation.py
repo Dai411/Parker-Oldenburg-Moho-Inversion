@@ -2,7 +2,7 @@ import numpy as np
 import os
 from scipy.signal import convolve2d
 
-# ===== 设置路径 =====
+# ===== Set Path =====
 data_dir = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly'
 land_file = os.path.join(data_dir, 'BouguerLandGrid.asc')
 sea_file = os.path.join(data_dir, 'BouguerSeaGrid.asc')
