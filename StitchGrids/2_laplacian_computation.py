@@ -47,32 +47,32 @@ def write_asc_grid(filename, data, header):
 
 def compute_laplacian_fast(data, cellsize):
     """
-    离散 Laplacian（5点差分）- 公式 (13)
-    如果 stencil 中任意一点为 NaN，输出 NaN - 公式 (14)
+    Discrete Laplacian（5-point second order finite difference)- Equation (13)
+    If  any node from stencil is NaN，output NaN - Equation (14)
     """
-    # 5点差分核
+    # 5-point finite difference kernel
     kernel = np.array([[0, 1, 0],
                        [1, -4, 1],
                        [0, 1, 0]], dtype=np.float32)
     
-    # 标记 NaN 位置
+    # Mark the NaN locations
     nan_mask = np.isnan(data)
     
-    # NaN 替换为 0 以便卷积
+    # For convolution Replace NaN to 0
     data_clean = np.nan_to_num(data, nan=0.0)
     
-    # 卷积计算
+    # Convolution Computation
     laplacian = convolve2d(data_clean, kernel, mode='same', boundary='symm')
     laplacian = laplacian / (cellsize * cellsize)
     
-    # 扩展 NaN 掩码：5点中任意一点为 NaN 则输出 NaN
+    # Expand NaN mask： If  any node from stencil is NaN
     extended_nan = nan_mask.copy()
     if nan_mask.shape[0] > 1:
-        extended_nan[1:, :] |= nan_mask[:-1, :]      # 上
-        extended_nan[:-1, :] |= nan_mask[1:, :]      # 下
+        extended_nan[1:, :] |= nan_mask[:-1, :]      # Up
+        extended_nan[:-1, :] |= nan_mask[1:, :]      # Down
     if nan_mask.shape[1] > 1:
-        extended_nan[:, 1:] |= nan_mask[:, :-1]      # 左
-        extended_nan[:, :-1] |= nan_mask[:, 1:]      # 右
+        extended_nan[:, 1:] |= nan_mask[:, :-1]      # Left
+        extended_nan[:, :-1] |= nan_mask[:, 1:]      # Right
     
     laplacian[extended_nan] = np.nan
     
@@ -80,7 +80,7 @@ def compute_laplacian_fast(data, cellsize):
 
 def align_grid_to_land(data, data_header, land_header):
     """
-    将任意网格数据对齐到 Land 网格
+    Align random grid data to land grid
     """
     land_nrows = land_header['nrows']
     land_ncols = land_header['ncols']
@@ -113,43 +113,43 @@ def align_grid_to_land(data, data_header, land_header):
     
     return aligned
 
-# ===== 主程序 =====
+# ===== Main =====
 print("=" * 60)
-print("Step 2: Independent Laplacian Computation (文档2 Step 2)")
+print("Step 2: Independent Laplacian Computation (Document2 Step 2)")
 print("=" * 60)
 
-# 1. 读取头文件
-print("\n1. 读取头文件...")
+# 1. Read .asc file header
+print("\n1. Read Header from .asc...")
 land_header = read_asc_header(land_file)
 sea_header = read_asc_header(sea_file)
 
-# 2. 读取原始数据
-print("\n2. 读取原始重力数据...")
+# 2. Read Original Data
+print("\n2. Read Original Gravity Anomaly Data...")
 land_data = read_asc_grid(land_file, land_header)
 sea_data = read_asc_grid(sea_file, sea_header)
-print(f"   Land 数据形状: {land_data.shape}")
-print(f"   Sea 数据形状:  {sea_data.shape}")
+print(f"   Land Data Shape: {land_data.shape}")
+print(f"   Sea Data Shape:  {sea_data.shape}")
 
-# 3. 计算 Laplacian（在原始网格上，独立计算）
-print("\n3. 计算离散 Laplacian - 公式 (13)...")
+# 3. Laplacian  Computation（On original grids, independent）
+print("\n3. Discrete Laplacian Computation- Equation (13)...")
 cellsize = land_header['cellsize']
 
-print("   计算 Land Laplacian...")
+print("   Land Laplacian Computation...")
 land_laplacian = compute_laplacian_fast(land_data, cellsize)
 
-print("   计算 Sea Laplacian...")
+print("   Sea Laplacian Computation...")
 sea_laplacian = compute_laplacian_fast(sea_data, cellsize)
 
-print(f"   Land Laplacian 有效点: {np.sum(~np.isnan(land_laplacian)):,}")
-print(f"   Sea Laplacian 有效点:  {np.sum(~np.isnan(sea_laplacian)):,}")
+print(f"   Land Laplacian valid Points: {np.sum(~np.isnan(land_laplacian)):,}")
+print(f"   Sea Laplacian valid Points:  {np.sum(~np.isnan(sea_laplacian)):,}")
 
-# 4. 将 Sea Laplacian 对齐到 Land 网格（为 Step 3 做准备）
-print("\n4. 对齐 Sea Laplacian 到 Land 网格...")
+# 4. Align Sea Laplacian to Land Grids（Prepared for Step 3）
+print("\n4. Align Sea Laplacian to Land Grids...")
 sea_laplacian_aligned = align_grid_to_land(sea_laplacian, sea_header, land_header)
-print(f"   对齐后 Sea Laplacian 有效点: {np.sum(~np.isnan(sea_laplacian_aligned)):,}")
+print(f"   Aligned Sea Laplacian Valid Points: {np.sum(~np.isnan(sea_laplacian_aligned)):,}")
 
-# 5. 保存结果
-print("\n5. 保存 Laplacian 结果...")
+# 5. Save
+print("\n5. Save Laplacian Computation Results...")
 
 land_laplacian_file = os.path.join(output_dir, 'Land_Laplacian.asc')
 write_asc_grid(land_laplacian_file, land_laplacian, land_header)
@@ -157,14 +157,14 @@ print(f"   ✓ Land Laplacian: {land_laplacian_file}")
 
 sea_laplacian_original_file = os.path.join(output_dir, 'Sea_Laplacian_Original.asc')
 write_asc_grid(sea_laplacian_original_file, sea_laplacian, sea_header)
-print(f"   ✓ Sea Laplacian (原始网格): {sea_laplacian_original_file}")
+print(f"   ✓ Sea Laplacian (Original Data): {sea_laplacian_original_file}")
 
 sea_laplacian_aligned_file = os.path.join(output_dir, 'Sea_Laplacian_Aligned.asc')
 write_asc_grid(sea_laplacian_aligned_file, sea_laplacian_aligned, land_header)
-print(f"   ✓ Sea Laplacian (对齐到 Land): {sea_laplacian_aligned_file}")
+print(f"   ✓ Sea Laplacian (Aligned to Land): {sea_laplacian_aligned_file}")
 
-# 6. 统计信息
-print("\n6. Laplacian 统计:")
+# 6. Statics
+print("\n6. Laplacian Statics:")
 land_l_valid = land_laplacian[~np.isnan(land_laplacian)]
 sea_l_valid = sea_laplacian[~np.isnan(sea_laplacian)]
 
@@ -180,5 +180,5 @@ print(f"       max: {np.nanmax(sea_laplacian):.6f}")
 print(f"       mean: {np.nanmean(sea_laplacian):.6f}")
 print(f"       std: {np.nanstd(sea_laplacian):.6f}")
 
-print("\n✅ Step 2 完成！")
-print("\n📌 下一步: Step 3 - 合并 Laplacian (使用优先级掩码) 并插值间隙")
+print("\n✅ Step 2 Fined！")
+print("\n📌 Next: Step 3 - Merging Laplacian (Using Priority Mask) and Interpolating Gap")
