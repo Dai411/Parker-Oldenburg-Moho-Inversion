@@ -4,17 +4,17 @@ import time
 from scipy.interpolate import griddata
 from scipy.ndimage import label, distance_transform_edt
 
-# ===== 设置路径 =====
+# ===== Set File Path=====
 output_dir = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly/StitchGrids'
 mask_file = os.path.join(output_dir, 'PriorityMask.asc')
 land_laplacian_file = os.path.join(output_dir, 'Land_Laplacian.asc')
 sea_laplacian_aligned_file = os.path.join(output_dir, 'Sea_Laplacian_Aligned.asc')
-# ====================
-
-# ===== 插值方法选择 =====
-INTERP_MODE = 'local'  # 可选: 'global' 或 'local'
-PADDING = 30           # local 模式下的邻域扩展格数
 # ========================
+
+# ===== Interpolation Method Selection =====
+INTERP_MODE = 'local'  # Optional: 'global' or 'local'
+PADDING = 30           # Number of neighbor expansion grids in local mode
+# ==========================================
 
 def read_asc_header(filename):
     with open(filename, 'r') as f:
