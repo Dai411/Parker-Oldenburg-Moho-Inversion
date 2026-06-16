@@ -14,13 +14,15 @@ $\Omega_{sea}$ and $\Omega_{land}$ be the domains covered by the sea and
 land dataset, respectively. Because $g_{sea}(x,y)$ has priority, we
 define a priority mask $m(x,y)$ over $\text{Ω}$:
 
-$$\begin{array}{r}
-m(x,y) = \left\{ \begin{aligned}
-1,\ \  & if\ (x,y) \in g_{sea}(x,y) \\
-0,\ \  & if\ (x,y) \in g_{land}(x,y)\ and\ g_{sea} = NaN \\
-NaN,\ \  & else
-\end{aligned} \right.\ \#(11)
-\end{array}$$
+$$
+m(x,y)=
+\begin{cases}
+1, & (x,y)\in g_{\mathrm{sea}}(x,y) \\
+0, & (x,y)\in g_{\mathrm{land}}(x,y)\ \text{and}\ g_{\mathrm{sea}}=\mathrm{NaN} \\
+\mathrm{NaN}, & \text{otherwise}
+\end{cases}
+\tag{11}
+$$
 
 The initial composite gravity field $g_{0}(x,y)$ is established as:
 
