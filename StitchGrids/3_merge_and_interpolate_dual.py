@@ -112,13 +112,13 @@ def interpolate_global(L0, gap_mask):
     points = np.column_stack([valid_x, valid_y])
     grid_points = np.column_stack([grid_x.ravel(), grid_y.ravel()])
     
-    print("   执行全局插值（可能需要几分钟,‘cubic’换成‘linear’可快速验证）...")
+    print("   Processing global interpolation now (May take a few minute. 'linear' is much faster than 'cubic')...")
     interpolated = griddata(points, valid_vals, grid_points, 
                             method='cubic', fill_value=np.nan)
     
     L_filled = interpolated.reshape(ny, nx)
     
-    # 保留原始有效点
+    # Save original valid points
     L_filled[valid_mask] = L0[valid_mask]
     
     return L_filled
