@@ -94,10 +94,10 @@ def parse_args():
                         help='File path of .asc for final size')
     parser.add_argument('--output', default=None,
                         help='Output .asc file')
-    parser.add_argument('--tikhonov', dest='tikhonov', action='store_true', default=True,
-                        help='Using Tikhonov Regularization（Default）')
-    parser.add_argument('--no-tikhonov', dest='tikhonov', action='store_false',
-                        help='Not using Tikhonov Regularization，directly frequency domain division')
+    parser.add_argument('--tikhonov', dest='tikhonov', action='store_true', 
+                        help='Using Tikhonov Regularization')
+    parser.add_argument('--no-tikhonov', dest='tikhonov', action='store_false', default=True,
+                        help='Frequency domain division（Default, no Regularization）')
     parser.add_argument('--alpha', type=float, default=1e-10,
                         help='Tikhonov Regularized parameter alpha，only valid with --tikhonov')
     return parser.parse_args()
