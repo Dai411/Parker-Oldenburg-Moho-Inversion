@@ -125,20 +125,20 @@ def interpolate_global(L0, gap_mask):
 
 def interpolate_local(L0, gap_mask, padding=30):
     """
-    局部插值：只对每个间隙区域的扩展邻域进行插值
-    适用于大网格、间隙集中的情况
+    Local interpolation: Interpolation is performed only on the extended neighborhood of each gap region.
+    Suitable for large grids and concentrated gaps.
     """
-    print(f"   使用局部插值模式，padding={padding}...")
+    print(f"   Processing Local Interpolation now，padding={padding}...")
     
-    # 标记连通间隙区域
+    # Mark connected gapped area
     labeled_gaps, num_gaps = label(gap_mask)
-    print(f"   找到 {num_gaps} 个连通间隙区域")
+    print(f"   Found {num_gaps} connected gap area")
     
     L_filled = L0.copy()
     
     for gap_id in range(1, num_gaps + 1):
         if gap_id % 1000 == 0:
-            print(f"     处理间隙 {gap_id}/{num_gaps}...")
+            print(f"     Processing the gap {gap_id}/{num_gaps}...")
         
         region_mask = (labeled_gaps == gap_id)
         
@@ -146,28 +146,28 @@ def interpolate_local(L0, gap_mask, padding=30):
         if len(rows) == 0:
             continue
         
-        # 区域边界（扩展 padding）
+        # Expanding the edge（Expanding padding）
         r_min = max(0, np.min(rows) - padding)
         r_max = min(L0.shape[0], np.max(rows) + padding + 1)
         c_min = max(0, np.min(cols) - padding)
         c_max = min(L0.shape[1], np.max(cols) + padding + 1)
         
-        # 提取局部区域
+        # Extract local area
         local_region = L0[r_min:r_max, c_min:c_max].copy()
         local_gap = region_mask[r_min:r_max, c_min:c_max]
         
-        # 局部区域内的有效点
+        # Valid data in the local area
         local_valid_mask = ~np.isnan(local_region) & ~local_gap
         
         if np.sum(local_valid_mask) < 4:
             continue
         
-        # 局部有效点去除异常值
+        # Remove errors of valid points in the local area 
         local_valid_mask_clean = filter_outliers(local_region, local_valid_mask)
         if np.sum(local_valid_mask_clean) < 4:
             local_valid_mask_clean = local_valid_mask
         
-        # 需要插值的位置
+        # The locations need interpolation 
         interp_rows, interp_cols = np.where(local_gap)
         
         if len(interp_rows) == 0:
