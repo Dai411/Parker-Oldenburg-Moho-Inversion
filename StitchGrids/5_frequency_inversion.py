@@ -54,8 +54,8 @@ def write_asc_grid(filename, data, header):
 
 def compute_laplacian_transfer_function(nx, ny, dx, dy):
     """
-    计算离散拉普拉斯算子的传递函数 H(kx, ky)
-    公式: H = 2/dx^2 * (cos(kx*dx) - 1) + 2/dy^2 * (cos(ky*dy) - 1)
+    Compute the transfer function of the discrete Laplacian operator H(kx, ky)
+    Equation (17) in Document 2 : H = 2/dx^2 * (cos(kx*dx) - 1) + 2/dy^2 * (cos(ky*dy) - 1)
     """
     kx = 2 * np.pi * fftfreq(nx, dx)
     ky = 2 * np.pi * fftfreq(ny, dy)
@@ -89,17 +89,17 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='Frequency domain inversion for Bouguer anomaly from a filled Laplacian grid.')
     parser.add_argument('--input', default=DEFAULT_INPUT_FILE,
-                        help='输入 L_FilledLaplacian.asc 文件路径')
+                        help='Input L_FilledLaplacian.asc File Path')
     parser.add_argument('--header', default=DEFAULT_HEADER_FILE,
-                        help='用于获取网格头信息的 ASC 文件路径')
+                        help='File path of .asc for final size')
     parser.add_argument('--output', default=None,
-                        help='输出 ASC 文件路径，默认根据方法自动命名')
+                        help='Output .asc file')
     parser.add_argument('--tikhonov', dest='tikhonov', action='store_true', default=True,
-                        help='使用 Tikhonov 正则化（默认）')
+                        help='Using Tikhonov Regularization（Default）')
     parser.add_argument('--no-tikhonov', dest='tikhonov', action='store_false',
-                        help='不使用 Tikhonov 正则化，直接频域除法')
+                        help='Not using Tikhonov Regularization，directly frequency domain division')
     parser.add_argument('--alpha', type=float, default=1e-10,
-                        help='Tikhonov 正则化参数 alpha，只有在 --tikhonov 时生效')
+                        help='Tikhonov Regularized parameter alpha，only valid with --tikhonov')
     return parser.parse_args()
 
 
