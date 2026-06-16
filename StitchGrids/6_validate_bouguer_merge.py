@@ -166,7 +166,6 @@ def main():
     final_path = os.path.join(base_dir, args.final)
 
     print('Reading input files...')
-
     land_header, land_data = read_asc_grid(land_path)
     sea_header, sea_data = read_asc_grid(sea_path)
     final_header, final_data = read_asc_grid(final_path)
@@ -176,37 +175,17 @@ def main():
     print_region_stats('Final', final_data)
 
     print('Mapping sea coverage onto the land grid...')
-
-    sea_on_land = map_sea_to_land_grid(
-        land_header,
-        sea_header,
-        sea_data
-    )
-
-    print(
-        f'Sea-covered cells on land grid: '
-        f'{np.sum(sea_on_land):,}'
-    )
-
+    sea_on_land = map_sea_to_land_grid(land_header, sea_header, sea_data)
+    print(f'Sea-covered cells on land grid: {np.sum(sea_on_land):,}')
     land_only_mask = ~np.isnan(land_data) & ~sea_on_land
 
-    print(
-        f'Land-only valid cells: '
-        f'{np.sum(land_only_mask):,}'
-    )
+    print(f'Land-only valid cells: {np.sum(land_only_mask):,}')
 
     if np.sum(land_only_mask) == 0:
-        print(
-            'No land-only region was found. '
-            'Validation or correction cannot be performed.'
-        )
+        print('No land-only region was found. \nValidation or correction cannot be performed.')
         return
 
-    stats = compare_land_final(
-        land_data,
-        final_data,
-        land_only_mask
-    )
+    stats = compare_land_final(land_data, final_data, land_only_mask)
 
     print('\n=== Validation Results for Land-Only Region ===')
     print(f'  Number of cells: {stats["count"]:,}')
@@ -216,16 +195,11 @@ def main():
     print(f'  Maximum difference: {stats["max"]:.6f} mGal')
 
     if abs(stats['mean']) < args.threshold:
-        print(
-            f'\n✓ Mean difference is below {args.threshold} mGal. '
-            'No significant offset is detected in the land-only region.'
-        )
+        print(f'\n✓ Mean difference is below {args.threshold} mGal.
+            \nNo significant offset is detected in the land-only region.')
     else:
-        print(
-            f'\n⚠ Warning: Mean difference = '
-            f'{stats["mean"]:.6f} mGal. '
-            'A systematic offset may exist.'
-        )
+        print(f'\n⚠ Warning: Mean difference = f'{stats["mean"]:.6f} mGal. 
+            \nA systematic offset may exist.')
 
     if args.correct:
         print('\nComputing correction offset and saving output...')
