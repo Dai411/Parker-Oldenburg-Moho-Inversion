@@ -140,20 +140,20 @@ def main():
     g_final = frequency_domain_inversion(L_data, H, args.tikhonov, args.alpha)
     print('   IFFT Finished')
 
-    print('\n6. 结果统计:')
+    print('\n6. Results statics:')
     valid_g = g_final[~np.isnan(g_final)]
-    print(f'   最终布格异常有效点: {len(valid_g):,}')
-    print(f'   最小值: {np.min(valid_g):.6f} mGal')
-    print(f'   最大值: {np.max(valid_g):.6f} mGal')
-    print(f'   平均值: {np.mean(valid_g):.6f} mGal')
-    print(f'   标准差: {np.std(valid_g):.6f} mGal')
+    print(f'   Final number of valid Bouguer Anomaly Points: {len(valid_g):,}')
+    print(f'   Min: {np.min(valid_g):.6f} mGal')
+    print(f'   Max: {np.max(valid_g):.6f} mGal')
+    print(f'   Mean: {np.mean(valid_g):.6f} mGal')
+    print(f'   Std: {np.std(valid_g):.6f} mGal')
 
-    print('\n7. 保存最终结果...')
+    print('\n7. Save final results...')
     write_asc_grid(output_file, g_final, header)
-    print(f'   ✓ 最终布格异常: {output_file}')
+    print(f'   ✓ Final Bouguer Anomaly File: {output_file}')
 
-    print('\n✅ Step 5 完成！')
-    print('\n📌 下一步: 验证最终融合结果')
+    print('\n✅ Step 5 Finished！')
+    print('\n📌 Nextstep: Valid the final Bouguer Anomaly File')
 
 
 if __name__ == '__main__':
