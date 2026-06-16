@@ -78,42 +78,42 @@ def print_quality(mask, l_before, l_filled):
     surround_vals = l_filled[surround_mask]
 
     if surround_vals.size == 0:
-        print('  没有可用的周围区域值进行比较。')
+        print('  No valid neighbouring region for comparison.')
         return
 
-    print(f'\nGap 周围区域统计:')
-    print(f'  点数: {surround_vals.size:,}')
-    print(f'  范围: {np.min(surround_vals):.6f} ~ {np.max(surround_vals):.6f}')
-    print(f'  均值: {np.mean(surround_vals):.6f}')
+    print(f'\nGap Neighbouring region statics:')
+    print(f'  Points: {surround_vals.size:,}')
+    print(f'  Reange: {np.min(surround_vals):.6f} ~ {np.max(surround_vals):.6f}')
+    print(f'  Mean Value: {np.mean(surround_vals):.6f}')
 
     gap_mean = np.nanmean(gap_after)
     surround_mean = np.mean(surround_vals)
     diff = abs(gap_mean - surround_mean)
-    print(f'\n平滑性检查:')
-    print(f'  Gap 区域均值: {gap_mean:.6f}')
-    print(f'  周围区域均值: {surround_mean:.6f}')
-    print(f'  差异: {diff:.6f}')
+    print(f'\nSmoothness check:')
+    print(f'  Gap reigion global mean value: {gap_mean:.6f}')
+    print(f'  Neighbouring region mean value: {surround_mean:.6f}')
+    print(f'  Difference: {diff:.6f}')
 
     if diff < np.std(surround_vals):
-        print('  ✓ Gap 区域与周围区域一致，插值合理')
+        print('  ✓ Gap region is identical with neighbouring region, interpolation is acceptable')
     else:
-        print('  ⚠️ Gap 区域与周围区域存在差异')
+        print('  ⚠️ Gap region has apparent difference with neighbouring region')
 
 
 def print_quick(l_filled):
     print('=== Quick File Check ===')
     valid_count = np.sum(~np.isnan(l_filled))
-    print(f'    L_filled 形状: {l_filled.shape}')
-    print(f'    有效点 (非 NaN): {valid_count:,}')
+    print(f'    L_filled Shape: {l_filled.shape}')
+    print(f'    Valid Points (Non NaN): {valid_count:,}')
     if valid_count > 0:
-        print(f'    最小值: {np.nanmin(l_filled):.6f}')
-        print(f'    最大值: {np.nanmax(l_filled):.6f}')
+        print(f'    Minimum: {np.nanmin(l_filled):.6f}')
+        print(f'    Maximum: {np.nanmax(l_filled):.6f}')
 
 
 def main():
     parser = argparse.ArgumentParser(description='Unified gap checking for StitchGrids outputs.')
     parser.add_argument('--mode', choices=['all', 'summary', 'quality', 'quick'], default='all',
-                        help='选择检查模式: all/summary/quality/quick')
+                        help='Check Mode: all/summary/quality/quick')
     args = parser.parse_args()
 
     mask = read_asc_grid(MASK_FILE)
