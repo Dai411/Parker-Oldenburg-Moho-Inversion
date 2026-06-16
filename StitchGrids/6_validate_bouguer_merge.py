@@ -60,11 +60,7 @@ def map_sea_to_land_grid(land_header, sea_header, sea_data):
     sea_xmin = sea_header['xllcorner']
     sea_ymax = sea_header['yllcorner'] + sea_header['nrows'] * cellsize
 
-    sea_on_land = np.full(
-        (land_header['nrows'], land_header['ncols']),
-        False,
-        dtype=bool
-    )
+    sea_on_land = np.full((land_header['nrows'], land_header['ncols']), False, dtype=bool)
 
     for i in range(sea_header['nrows']):
         sea_y = sea_ymax - i * cellsize
@@ -100,59 +96,27 @@ def compare_land_final(land_data, final_data, land_only_mask):
 
 def print_region_stats(name, data):
     """Print summary statistics for a grid."""
-    print(
-        f"{name} shape: {data.shape}, "
-        f"valid cells: {np.sum(~np.isnan(data)):,}"
-    )
-    print(
-        f"  Range: min={np.nanmin(data):.2f}, "
-        f"max={np.nanmax(data):.2f}, "
-        f"mean={np.nanmean(data):.2f}\n"
+    print(f"{name} shape: {data.shape}, \nvalid cells: {np.sum(~np.isnan(data)):,}")
+    print(f"  Range: min={np.nanmin(data):.2f}, \nmax={np.nanmax(data):.2f}, \nmean={np.nanmean(data):.2f}\n"
     )
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='Validate and optionally correct Bouguer final merge results.'
-    )
+        description='Validate and optionally correct Bouguer final merge results.')
 
-    parser.add_argument(
-        '--land',
-        default='BouguerLandGrid.asc',
-        help='Path to land grid ASC file'
-    )
-
-    parser.add_argument(
-        '--sea',
-        default='BouguerSeaGrid.asc',
-        help='Path to sea grid ASC file'
-    )
-
-    parser.add_argument(
-        '--final',
-        default='BouguerFinal.asc',
-        help='Path to final merged Bouguer ASC file'
-    )
-
-    parser.add_argument(
-        '--output',
-        default='BouguerFinal_Corrected.asc',
-        help='Path to corrected output file (used with --correct)'
-    )
-
-    parser.add_argument(
-        '--correct',
-        action='store_true',
-        help='Calculate and save a corrected final grid based on land-only offset'
-    )
-
-    parser.add_argument(
-        '--threshold',
-        type=float,
-        default=1.0,
-        help='Acceptable mean difference threshold in land-only region (mGal)'
-    )
-
+    parser.add_argument('--land', default='BouguerLandGrid.asc', 
+                        help='Path to land grid ASC file')
+    parser.add_argument('--sea', default='BouguerSeaGrid.asc',
+                        help='Path to sea grid ASC file')
+    parser.add_argument('--final', default='BouguerFinal.asc',
+                        help='Path to final merged Bouguer ASC file')
+    parser.add_argument('--output', default='BouguerFinal_Corrected.asc',
+                        help='Path to corrected output file (used with --correct)')
+    parser.add_argument('--correct', action='store_true',
+                        help='Calculate and save a corrected final grid based on land-only offset')
+    parser.add_argument('--threshold', type=float, default=1.0
+                        help='Acceptable mean difference threshold in land-only region (mGal)')
     return parser.parse_args()
 
 
