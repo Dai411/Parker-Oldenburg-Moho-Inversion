@@ -109,10 +109,10 @@ def main():
     output_file = args.output or (DEFAULT_OUTPUT_TIKHONOV if args.tikhonov else DEFAULT_OUTPUT_DIRECT)
 
     print('=' * 60)
-    print('Step 5: Frequency Domain Inversion (文档2 Step 5)')
+    print('Step 5: Frequency Domain Inversion (Document2 Step 5)')
     print('=' * 60)
 
-    print('\n1. 读取数据...')
+    print('\n1. Read data from .asc file...')
     header = read_asc_header(args.header)
     L_data = read_asc_grid(args.input)
 
@@ -120,25 +120,25 @@ def main():
     dx = header['cellsize']
     dy = header['cellsize']
 
-    print(f'   网格尺寸: {ny} x {nx}')
-    print(f'   网格间距: dx={dx}, dy={dy} m')
-    print(f'   L_data 有效点: {np.sum(~np.isnan(L_data)):,}')
-    print(f'   L_data NaN: {np.sum(np.isnan(L_data)):,}')
+    print(f'   Grid Dimension: {ny} x {nx}')
+    print(f'   Gird Size: dx={dx}, dy={dy} m')
+    print(f'   Valid data in L_data: {np.sum(~np.isnan(L_data)):,}')
+    print(f'   Nan in L_data: {np.sum(np.isnan(L_data)):,}')
 
-    print('\n2. 创建有效区域掩码...')
+    print('\n2. Build mask in valid area...')
     valid_mask = ~np.isnan(L_data)
-    print(f'   有效区域: {np.sum(valid_mask):,} 点 ({100 * np.sum(valid_mask) / L_data.size:.1f}%)')
+    print(f'   Valid are: {np.sum(valid_mask):,} points ({100 * np.sum(valid_mask) / L_data.size:.1f}%)')
 
-    print('\n3. 准备 FFT 输入（NaN -> 0）...')
-    print(f'   alpha = {args.alpha:.2e}' if args.tikhonov else '   直接频域反演，不使用 alpha 参数')
+    print('\n3. Prepare FFT input（NaN -> 0）...')
+    print(f'   alpha = {args.alpha:.2e}' if args.tikhonov else '   Direct frequency inversion, no alpha parameter')
 
-    print('\n4. 计算离散拉普拉斯传递函数 H(kx, ky)...')
+    print('\n4. Compute discrete Laplacian transfer function H(kx, ky)...')
     H = compute_laplacian_transfer_function(nx, ny, dx, dy)
-    print(f'   H 范围: {np.min(H):.6e} ~ {np.max(H):.6e}')
+    print(f'   H Region: {np.min(H):.6e} ~ {np.max(H):.6e}')
 
-    print('\n5. 频域反解 (FFT -> {} -> IFFT)...'.format('Tikhonov 滤波' if args.tikhonov else '直接除法'))
+    print('\n5. Frequency domain inversion (FFT -> {} -> IFFT)...'.format('Tikhonov Filter' if args.tikhonov else 'Direct Division'))
     g_final = frequency_domain_inversion(L_data, H, args.tikhonov, args.alpha)
-    print('   IFFT 完成')
+    print('   IFFT Finished')
 
     print('\n6. 结果统计:')
     valid_g = g_final[~np.isnan(g_final)]
