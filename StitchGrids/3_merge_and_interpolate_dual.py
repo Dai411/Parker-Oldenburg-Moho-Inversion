@@ -75,21 +75,21 @@ def fill_remaining_nans(L_filled):
 
 def interpolate_global(L0, gap_mask):
     """
-    全局插值：对整个网格进行插值
-    适用于小网格或间隙分布广泛的情况
+    Global interpolation: Interpolation upon the who grids
+    Suitable for small grids and widely-distributed gaps
     """
-    print("   使用全局插值模式...")
+    print("   Global Interpolation...")
     
     ny, nx = L0.shape
     
-    # 有效点（非 NaN 且非间隙）
+    # Valid points（No NaN and not in Gap）
     valid_mask = ~np.isnan(L0)
     
     if np.sum(valid_mask) == 0:
-        print("   错误：没有有效数据点")
+        print("   Error: No valid points")
         return L0
     
-    # 去除异常值（3倍标准差）
+    # Remove/Clean errors （3-times STD）
     mean_val = np.nanmean(L0)
     std_val = np.nanstd(L0)
     valid_mask_clean = valid_mask & (np.abs(L0 - mean_val) <= 3 * std_val)
@@ -97,18 +97,18 @@ def interpolate_global(L0, gap_mask):
     if np.sum(valid_mask_clean) < 10:
         valid_mask_clean = valid_mask
     
-    print(f"   有效插值点: {np.sum(valid_mask_clean):,}")
+    print(f"   Valid Interpolation Points: {np.sum(valid_mask_clean):,}")
     
-    # 创建坐标网格
+    # Build Grid Coordinate
     x = np.arange(nx)
     y = np.arange(ny)
     grid_x, grid_y = np.meshgrid(x, y)
     
-    # 提取有效点
+    # Extract Valid Points
     valid_y, valid_x = np.where(valid_mask_clean)
     valid_vals = L0[valid_mask_clean]
     
-    # 全局插值
+    # Global Interpolation
     points = np.column_stack([valid_x, valid_y])
     grid_points = np.column_stack([grid_x.ravel(), grid_y.ravel()])
     
