@@ -91,7 +91,7 @@ def parse_args():
     parser.add_argument('--input', default=DEFAULT_INPUT_FILE,
                         help='Input L_FilledLaplacian.asc File Path')
     parser.add_argument('--header', default=DEFAULT_HEADER_FILE,
-                        help='File path of .asc for final size')
+                        help='Output file name (default: auto-named based on method)')
     parser.add_argument('--output', default=None,
                         help='Output .asc file')
     parser.add_argument('--tikhonov', dest='tikhonov', action='store_true', 
