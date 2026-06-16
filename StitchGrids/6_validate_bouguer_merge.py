@@ -13,7 +13,6 @@ Features:
     - Optionally apply a systematic offset correction
     - Save corrected output grid
 
-Author: Your Name
 """
 
 import argparse
@@ -230,46 +229,16 @@ def main():
 
     if args.correct:
         print('\nComputing correction offset and saving output...')
-
         offset = stats['mean']
         final_corrected = final_data + offset
-
-        write_asc_grid(
-            args.output,
-            final_header,
-            final_corrected
-        )
-
-        print(
-            f'✓ Corrected grid saved to: '
-            f'{args.output}'
-        )
-
-        corrected_diff = (
-            land_data[land_only_mask]
-            - final_corrected[land_only_mask]
-        )
-
-        print(
-            f'Corrected mean difference: '
-            f'{np.nanmean(corrected_diff):.6f} mGal'
-        )
-
-        print(
-            f'Corrected standard deviation: '
-            f'{np.nanstd(corrected_diff):.6f} mGal'
-        )
-
-        print(
-            '\nThe corrected grid is recommended '
-            'for subsequent analysis.'
-        )
-
+        write_asc_grid(args.output, final_header, final_corrected)
+        print(f'✓ Corrected grid saved to: {args.output}')
+        corrected_diff = (land_data[land_only_mask] - final_corrected[land_only_mask])
+        print(f'Corrected mean difference: {np.nanmean(corrected_diff):.6f} mGal')
+        print(f'Corrected standard deviation: {np.nanstd(corrected_diff):.6f} mGal')
+        print('\nThe corrected grid is recommended for subsequent analysis.')
     else:
-        print(
-            '\nNo correction was performed. '
-            'Use the --correct option to generate a corrected result.'
-        )
+        print('\nNo correction was performed. \nUse the --correct option to generate a corrected result.')
 
 
 if __name__ == '__main__':
