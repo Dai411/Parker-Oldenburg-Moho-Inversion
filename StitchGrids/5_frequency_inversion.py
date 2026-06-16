@@ -4,13 +4,12 @@ import os
 from scipy.fft import fft2, ifft2, fftfreq
 
 # ===== Set File Path =====
-OUTPUT_DIR = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly/StitchGrids'
+OUTPUT_DIR = 'C:/.../BouguerAnomaly/StitchGrids'
 DEFAULT_INPUT_FILE = os.path.join(OUTPUT_DIR, 'L_FilledLaplacian.asc')
 DEFAULT_HEADER_FILE = os.path.join(OUTPUT_DIR, 'Land_Laplacian.asc')  # For header, which used for final size
 DEFAULT_OUTPUT_TIKHONOV = os.path.join(OUTPUT_DIR, 'BouguerFinal_Tikhonov.asc')
 DEFAULT_OUTPUT_DIRECT = os.path.join(OUTPUT_DIR, 'BouguerFinal.asc')
 # ====================
-
 
 def read_asc_header(filename):
     with open(filename, 'r') as f:
@@ -27,7 +26,7 @@ def read_asc_header(filename):
 
 
 def read_asc_grid(filename):
-    """读取 ASC 文件，将 -9999 转为 NaN"""
+    """Read .asc File, Convert -9999 value to NaN"""
     with open(filename, 'r') as f:
         for _ in range(6):
             f.readline()
@@ -37,7 +36,7 @@ def read_asc_grid(filename):
 
 
 def write_asc_grid(filename, data, header):
-    """写入 ASC 文件，将 NaN 转为 -9999"""
+    """Write .asc File，Convert NaN to -9999"""
     output_data = data.copy()
     output_data[np.isnan(output_data)] = -9999.0
 
