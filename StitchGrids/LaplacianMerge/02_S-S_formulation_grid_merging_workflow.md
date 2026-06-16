@@ -1,4 +1,6 @@
-**Theoretical foundation**
+***Step by Step formulation of the proposed grid-merging workflow***
+---
+-- Originally written by **Marco Ligi**
 
 The object is to merge two discrete gravity anomaly (DGA) fields,
 $g_{sea}(x,y)$ and $g_{land}(x,y)$, sampled on regular grids with size
@@ -9,30 +11,31 @@ Laplacian domain.
 
 **Step 1: Geometry setup and priority masking**
 
-Define a global domain $\Omega$ that encompasses both grids. Let
+Define a global domain **$\Omega$** that encompasses both grids. Let
 $\Omega_{sea}$ and $\Omega_{land}$ be the domains covered by the sea and
 land dataset, respectively. Because $g_{sea}(x,y)$ has priority, we
-define a priority mask $m(x,y)$ over $\text{Ω}$:
+define a priority mask $m(x,y)$ over **$\text{Ω}$**:
 
 $$
 m(x,y)=
 \begin{cases}
-1, & (x,y)\in g_{\mathrm{sea}}(x,y) \\
-0, & (x,y)\in g_{\mathrm{land}}(x,y)\ \text{and}\ g_{\mathrm{sea}}=\mathrm{NaN} \\
-\mathrm{NaN}, & \text{otherwise}
+1, & if\ (x,y)\in \Omega_{sea} \\
+0, & if\ (x,y)\in \Omega_{land}\ \text{and}\ g_{\{sea}}=\{NaN} \\
+\{NaN}, & \text{otherwise}
 \end{cases}
-\tag{11}
+\qquad (11)
 $$
 
 The initial composite gravity field $g_{0}(x,y)$ is established as:
 
-$$\begin{array}{r}
-g_{0}(x,y) = \left\{ \begin{aligned}
-g_{sea},\ \  & if\ m(x,y) = 1 \\
-g_{land},\ \  & if\ m(x,y) = 0 \\
-NaN,\ \  & else
-\end{aligned} \right.\ \#(12)
-\end{array}$$
+$$
+g_{0}(x,y) = \begin{cases}
+g_{sea}\ \,  & if\ m(x,y) = 1 \\
+g_{land}\ \,  & if\ m(x,y) = 0 \\
+\{NaN}\ \,  & \mathrm{otherwise}
+\end{cases} 
+\qquad(12)
+$$
 
 **Step 2: Independent Laplacian computation on the ordinary space**
 
