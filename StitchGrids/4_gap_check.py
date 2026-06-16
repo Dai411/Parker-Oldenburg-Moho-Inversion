@@ -18,8 +18,8 @@ import os
 import numpy as np
 from scipy.ndimage import binary_dilation
 
-# ===== 设置路径 =====
-OUTPUT_DIR = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly/StitchGrids'
+# ===== Set File Path =====
+OUTPUT_DIR = 'C:/.../BouguerAnomaly/StitchGrids'
 MASK_FILE = os.path.join(OUTPUT_DIR, 'PriorityMask.asc')
 L_BEFORE_FILE = os.path.join(OUTPUT_DIR, 'L0_MergedLaplacian_BeforeInterp.asc')
 L_FILLED_FILE = os.path.join(OUTPUT_DIR, 'L_FilledLaplacian.asc')
@@ -35,43 +35,43 @@ def read_asc_grid(filename):
 
 def print_summary(mask, l_before, l_filled):
     print('=== Summary Check ===')
-    print(f'Mask 形状: {mask.shape}')
-    print(f'  mask 有效点 (非NaN): {np.sum(~np.isnan(mask)):,}')
+    print(f'Mask Sahpe: {mask.shape}')
+    print(f'  mask Valid Points ( Non NaN): {np.sum(~np.isnan(mask)):,}')
     print(f'  mask=1 (Sea): {np.sum(mask == 1):,}')
     print(f'  mask=0 (Land): {np.sum(mask == 0):,}')
     print(f'  mask=NaN: {np.sum(np.isnan(mask)):,}')
 
-    print(f'\nL_before 形状: {l_before.shape}')
-    print(f'  L_before 有效点: {np.sum(~np.isnan(l_before)):,}')
+    print(f'\nL_before Shape: {l_before.shape}')
+    print(f'  L_before Valid Points: {np.sum(~np.isnan(l_before)):,}')
     print(f'  L_before NaN: {np.sum(np.isnan(l_before)):,}')
 
-    print(f'\nL_filled 形状: {l_filled.shape}')
-    print(f'  L_filled 有效点: {np.sum(~np.isnan(l_filled)):,}')
+    print(f'\nL_filled Shape: {l_filled.shape}')
+    print(f'  L_filled Valid Points: {np.sum(~np.isnan(l_filled)):,}')
     print(f'  L_filled NaN: {np.sum(np.isnan(l_filled)):,}')
 
     gap_mask = (~np.isnan(mask)) & np.isnan(l_before)
-    print(f'\ngap_mask (mask 有效且 L_before 为 NaN): {np.sum(gap_mask):,}')
+    print(f'\ngap_mask (mask valid and L_before is NaN): {np.sum(gap_mask):,}')
     if np.sum(gap_mask) > 0:
         gap_filled = l_filled[gap_mask]
-        print(f'  这些位置在 L_filled 中有效: {np.sum(~np.isnan(gap_filled)):,}')
+        print(f'  Those locations are valid in L_filled: {np.sum(~np.isnan(gap_filled)):,}')
 
 
 def print_quality(mask, l_before, l_filled):
     print('=== Quality Check ===')
     gap_mask = (~np.isnan(mask)) & np.isnan(l_before)
     gap_count = np.sum(gap_mask)
-    print(f'Gap 区域点数: {gap_count:,}')
+    print(f'Gap Region numbers: {gap_count:,}')
 
     if gap_count == 0:
-        print('  无 Gap 区域可分析。')
+        print('  No Gap Region for analysis.')
         return
 
     gap_after = l_filled[gap_mask]
-    print(f'  插值前 NaN 数量: {np.sum(np.isnan(gap_after)):,}')
-    print(f'  插值后有效数量: {np.sum(~np.isnan(gap_after)):,}')
+    print(f'  The number of NaN before interpolation: {np.sum(np.isnan(gap_after)):,}')
+    print(f'  The number of NaN after interpolation: {np.sum(~np.isnan(gap_after)):,}')
     if np.sum(~np.isnan(gap_after)) > 0:
-        print(f'  插值后数值范围: {np.nanmin(gap_after):.6f} ~ {np.nanmax(gap_after):.6f}')
-        print(f'  插值后均值: {np.nanmean(gap_after):.6f}')
+        print(f'  The data range after interpolation: {np.nanmin(gap_after):.6f} ~ {np.nanmax(gap_after):.6f}')
+        print(f'  The mean value after interpolation: {np.nanmean(gap_after):.6f}')
 
     neighbor_mask = binary_dilation(gap_mask, iterations=1)
     surround_mask = neighbor_mask & ~gap_mask & ~np.isnan(l_filled)
