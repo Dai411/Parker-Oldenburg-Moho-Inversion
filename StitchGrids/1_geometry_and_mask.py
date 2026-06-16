@@ -85,7 +85,7 @@ def align_sea_to_land_grid(sea_data, sea_header, land_header):
 
 # ===== Main =====
 print("=" * 60)
-print("Step 1: Geometry Setup and Priority Masking ")
+print("Step 1: Geometry Setup and Priority Masking (Document2 Step 1)")
 print("=" * 60)
 
 # 1. Read Header Info.
