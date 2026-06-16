@@ -192,16 +192,16 @@ def interpolate_local(L0, gap_mask, padding=30):
     
     return L_filled
 
-# ===== 主程序 =====
+# ===== Mian Programme =====
 print("=" * 60)
-print("Step 3+4: Merge Laplacian + Interpolate Gaps (文档2 Step 3-4)")
+print("Step 3+4: Merge Laplacian + Interpolate Gaps (Document 2 Step 3-4)")
 print("=" * 60)
-print(f"\n插值模式: {INTERP_MODE.upper()}")
+print(f"\nInterpolation Mode: {INTERP_MODE.upper()}")
 if INTERP_MODE == 'local':
     print(f"  Padding: {PADDING} 格 (~{PADDING * 300 / 1000:.1f} km)")
 
-# 1. 读取数据
-print("\n1. 读取数据...")
+# 1. Read Data 
+print("\n1. read header of .asc...")
 mask_header = read_asc_header(mask_file)
 mask = read_asc_grid(mask_file, mask_header)
 
@@ -210,11 +210,11 @@ land_laplacian = read_asc_grid(land_laplacian_file, land_header)
 
 sea_laplacian = read_asc_grid(sea_laplacian_aligned_file, land_header)
 
-print(f"   Mask 形状: {mask.shape}")
-print(f"   Land Laplacian 形状: {land_laplacian.shape}")
+print(f"   Mask Shape: {mask.shape}")
+print(f"   Land Laplacian Shape: {land_laplacian.shape}")
 
-# 2. Step 3: 合并 Laplacian - 公式 (15)
-print("\n2. Step 3: 合并 Laplacian (公式 15)...")
+# 2. Step 3: Merging Laplacian - Equation (15)
+print("\n2. Step 3: Merging Laplacian (Equation 15)...")
 
 L0 = np.full_like(land_laplacian, np.nan)
 
@@ -224,27 +224,27 @@ L0[sea_mask] = sea_laplacian[sea_mask]
 land_mask = (mask == 0)
 L0[land_mask] = land_laplacian[land_mask]
 
-print(f"   L0 有效点: {np.sum(~np.isnan(L0)):,}")
-print(f"   L0 中 NaN: {np.sum(np.isnan(L0)):,}")
+print(f"   L0-Valid Points: {np.sum(~np.isnan(L0)):,}")
+print(f"   L0-NaN: {np.sum(np.isnan(L0)):,}")
 
-# 3. 识别间隙 Ω_gap
-print("\n3. 识别间隙 Ω_gap...")
+# 3. Identify the gap Ω_gap
+print("\n3. Identifying Ω_gap...")
 gap_mask = (~np.isnan(mask)) & np.isnan(L0)
-print(f"   间隙点数 (Ω_gap): {np.sum(gap_mask):,}")
+print(f"   The number of gaps (Ω_gap): {np.sum(gap_mask):,}")
 
 if np.sum(gap_mask) == 0:
-    print("   没有间隙，无需插值")
+    print("   No gaps so no need for interpolation.")
     L_filled = L0
 else:
-    # 4. Step 4: 插值填充间隙
-    print("\n4. Step 4: 插值填充间隙...")
+    # 4. Step 4: Fill gap by interpolation
+    print("\n4. Step 4: Filling gap with interpolation...")
     
-    # 保存插值前的 L0
+    # Save L0 before interpolation
     L0_before_file = os.path.join(output_dir, 'L0_MergedLaplacian_BeforeInterp.asc')
     write_asc_grid(L0_before_file, L0, land_header)
-    print(f"   ✓ 插值前 L0 已保存: {L0_before_file}")
+    print(f"   ✓ L0 is saved before interpolation: {L0_before_file}")
     
-    # 根据模式选择插值方法
+    # Choose the method for interpolation due to user's choice
     start_time = time.time()
     
     if INTERP_MODE == 'global':
@@ -253,29 +253,29 @@ else:
         L_filled = interpolate_local(L0, gap_mask, padding=PADDING)
     
     elapsed = time.time() - start_time
-    print(f"   插值耗时: {elapsed:.2f} 秒")
+    print(f"   Elapsed time for interpolation: {elapsed:.2f} sec.")
 
     remaining_nans_before = np.sum(np.isnan(L_filled))
     if remaining_nans_before > 0:
-        print(f"   ⚠️ 插值后仍有 {remaining_nans_before:,} 个 NaN，使用最近邻填充")
+        print(f"   ⚠️ There are still {remaining_nans_before:,} NaN points, using neigbouring interpolation")
         L_filled = fill_remaining_nans(L_filled)
         remaining_nans_after = np.sum(np.isnan(L_filled))
-        print(f"   最近邻填充后 NaN: {remaining_nans_after:,}")
+        print(f"   The numbers of NaN after the nearest neighbour interpolations: {remaining_nans_after:,}")
 
-# 5. 保存结果
-print("\n5. 保存插值后的 Laplacian...")
+# 5. Save Results
+print("\n5. Save Laplacian after interpolation...")
 L_filled_file = os.path.join(output_dir, 'L_FilledLaplacian.asc')
 write_asc_grid(L_filled_file, L_filled, land_header)
-print(f"   ✓ 插值后 Laplacian: {L_filled_file}")
+print(f"   ✓ Interpolated Laplacian: {L_filled_file}")
 
-# 6. 统计插值效果
-print("\n6. 插值效果统计:")
-print(f"   插值前 NaN: {np.sum(np.isnan(L0)):,}")
-print(f"   插值后 NaN: {np.sum(np.isnan(L_filled)):,}")
-print(f"   成功填充: {np.sum(np.isnan(L0)) - np.sum(np.isnan(L_filled)):,}")
+# 6. Statics of interpolation
+print("\n6. Statics of interpolation:")
+print(f"   NaN before interpolation: {np.sum(np.isnan(L0)):,}")
+print(f"   NaN after interpolation: {np.sum(np.isnan(L_filled)):,}")
+print(f"   Successfully interpolated: {np.sum(np.isnan(L0)) - np.sum(np.isnan(L_filled)):,}")
 
 if np.sum(np.isnan(L_filled)) > 0:
-    print(f"   ⚠️ 警告：仍有 {np.sum(np.isnan(L_filled)):,} 个 NaN 未被填充")
+    print(f"   ⚠️ Warning：There is still {np.sum(np.isnan(L_filled)):,} NaN has not been interpolated")
 
-print("\n✅ Step 3+4 完成！")
-print("\n📌 下一步: Step 5 - 频域反解得到最终布格异常")
+print("\n✅ Step 3+4 Finished！")
+print("\n📌 Next Step: 5 - Inverse frequency domain solution yields the final Bouguer anomaly")
