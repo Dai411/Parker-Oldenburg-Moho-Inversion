@@ -5,7 +5,7 @@ from scipy.interpolate import griddata
 from scipy.ndimage import label, distance_transform_edt
 
 # ===== Set File Path=====
-output_dir = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly/StitchGrids'
+output_dir = 'C:/.../BouguerAnomaly/StitchGrids'
 mask_file = os.path.join(output_dir, 'PriorityMask.asc')
 land_laplacian_file = os.path.join(output_dir, 'Land_Laplacian.asc')
 sea_laplacian_aligned_file = os.path.join(output_dir, 'Sea_Laplacian_Aligned.asc')
