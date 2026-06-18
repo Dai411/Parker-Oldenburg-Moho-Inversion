@@ -130,15 +130,17 @@ and $\mathrm{\Delta}y$, the discrete transfer function (or filter
 spectrum) $H(k_{x},k_{y})$ is derived by applying the DFT to the stencil
 coefficients:
 
-$$\begin{array}{r}
-H\left( k_{x},k_{y} \right) = \frac{2}{\Delta x^{2}}\left\lbrack \cos\left( k_{x}\Delta x \right) - 1 \right\rbrack + \frac{2}{\Delta y^{2}}\left\lbrack \cos\left( k_{y}\Delta y \right) - 1 \right\rbrack\ \#(17)
-\end{array}$$
+$$
+H\left( k_{x},k_{y} \right) = \frac{2}{\Delta x^{2}}\left\lbrack \cos\left( k_{x}\Delta x \right) - 1 \right\rbrack + \frac{2}{\Delta y^{2}}\left\lbrack \cos\left( k_{y}\Delta y \right) - 1 \right\rbrack\ 
+\qquad(17)
+$$
 
 The inverse solution via direct division is:
 
-$$\begin{array}{r}
-g_{f}(i,j) = \mathcal{F}^{- 1}\left\{ \frac{F(k_{x},k_{y})}{H(k_{x},k_{y})} \right\}\ \#(18)
-\end{array}$$
+$$
+g_{f}(i,j) = \mathcal{F}^{- 1}\{ \frac{F(k_{x},k_{y})}{H(k_{x},k_{y})} \}\ 
+\qquad(18)
+$$
 
 <span class="mark">Don’t use Tikhonov Regularization:</span>
 
@@ -146,9 +148,10 @@ In practice, direct division $H(k_{x},k_{y})$ is problematic at zero
 wavenumber where $H(0,0) = 0$. To stabilizes the inversion, Tikhonov
 regularization is applied,
 
-$$\begin{array}{r}
-g_{f} = \mathcal{F}^{- 1}\left\{ \frac{F \bullet H}{\left( H^{2} + \alpha^{2} \right)} \right\}\ \#(18a)
-\end{array}$$
+$$
+g_{f} = \mathcal{F}^{- 1}\left\{ \frac{F \bullet H}{\left( H^{2} + \alpha^{2} \right)} \right\}\ 
+\qquad(18a)
+$$
 
 where $\alpha$ is a small regularization parameter
 ($\alpha\sim 10^{- 6}\ to\ 10^{- 8}$). This formulation avoids division
