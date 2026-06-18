@@ -1,9 +1,9 @@
 # dig_and_fill.py
 """
-拼接带挖掉 + 插值填充法
-- 只有拼接带被重新插值
-- 非拼接带完全保留原始值
-- 避免 Laplacian 域的全场影响
+Dig the overlapped region and interpolate the digged
+- Only the overlapped region will be re-interpolated
+- Non-overlapped region keep the original value
+- Avoid the global effect from the Laplacian domain
 
 插值方法平滑性等级:
     linear            : C⁰ 连续 (一阶导数不连续，有折痕)
