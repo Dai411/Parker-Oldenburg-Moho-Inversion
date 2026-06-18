@@ -78,23 +78,25 @@ $\delta_{i,j} = \{(i,j);(i + 1,j);(i - 1,j);(i,j + 1);(i,j - 1)\}$.
 Combine the independent Laplacians into a single source grid
 $L_{0}(x,y)$ using the priority mask:
 
-$$\begin{array}{r}
-L_{0}(i,j) = \left\{ \begin{aligned}
+$$
+L_{0}(i,j) = 
+\begin{cases}
 L_{sea},\ \  & if\ m(i,j) = 1 \\
 L_{land},\ \  & if\ m(i,j) = 0 \\
 NaN,\ \  & else
-\end{aligned} \right.\ \#(15)
-\end{array}$$
+\end{cases} 
+\qquad(15)
+$$
 
 Because the stencils lose valid tracking points near the clipping
-boundaries of $\Omega_{sea}$ and $\Omega_{land}$, a natural structural
-buffer zone $\Omega_{gap}$ composed entirely of $NaN$ values are formed
+boundaries of **$\Omega_{sea}$** and **$\Omega_{land}$**, a natural structural
+buffer zone **$\Omega_{gap}$** composed entirely of $NaN$ values are formed
 along the suture line.
 
 **Step 4: Bi-cubic Spline Interpolation of the Laplacian**
 
 To ensure continuity in the second derivatives across the stich line,
-the missing values in $\Omega_{gap}$ are reconstructed. A 2 dimensional
+the missing values in **$\Omega_{gap}$** are reconstructed. A 2 dimensional
 bi-cubic spline surface $S(x,y)$ is fitted to the valid data points of
 $L_{0}(x,y)$ surrounding the gap.
 
@@ -102,9 +104,10 @@ For a local cell $(i,j)$ of $\Omega_{gap}$, the interpolated Laplacian
 value is computed using a 4x4 neighbourhood of surrounding valid
 Laplacian nodes:
 
-$$\begin{array}{r}
-L_{int}(x,y) = \sum_{m = 0}^{3}{\sum_{n = 0}^{3}{a_{mn}x^{m}y^{n}}\forall\ x,y \in \Omega_{gap}}\#(16)
-\end{array}$$
+$$
+L_{int}(x,y) = \sum_{m = 0}^{3}{\sum_{n = 0}^{3}{a_{mn}x^{m}y^{n}}\forall\ x,y \in \Omega_{gap}}
+\qquad(16)
+$$
 
 The coefficients $a_{mn}$ are determined by solving a linear system that
 matches the value, first derivatives ($L_{x},L_{y}$) and
