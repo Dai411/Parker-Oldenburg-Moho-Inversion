@@ -142,15 +142,16 @@ g_{f}(i,j) = \mathcal{F}^{- 1}\{ \frac{F(k_{x},k_{y})}{H(k_{x},k_{y})} \}\
 \qquad(18)
 $$
 
-<span class="mark">Don’t use Tikhonov Regularization:</span>
+**Normally, Don’t use Tikhonov Regularization!**  
+Note: It will smooth the real data.  
 
 In practice, direct division $H(k_{x},k_{y})$ is problematic at zero
 wavenumber where $H(0,0) = 0$. To stabilizes the inversion, Tikhonov
 regularization is applied,
 
 $$
-g_{f} = \mathcal{F}^{- 1}\left\{ \frac{F \bullet H}{\left( H^{2} + \alpha^{2} \right)} \right\}\ 
-\qquad(18a)
+g_{f} = \mathcal{F}^{- 1}\{ \frac{F \bullet H}{( H^{2} + \alpha^{2})} \}\ 
+\qquad(19a)
 $$
 
 where $\alpha$ is a small regularization parameter
@@ -159,6 +160,7 @@ by zero while maintaining continuity in the spectral domain. An
 alternative approach is to apply a small threshold $\varepsilon$ such
 that
 
-$$\begin{array}{r}
-H(k) = \max\left( \left| H(k) \right|,\ \varepsilon \right) \bullet sign\left( H(k) \right)\ \#(18b)
-\end{array}$$
+$$
+H(k) = \max (|H(k)|,\ \varepsilon ) \bullet sign( H(k) )\ 
+\qquad(19b)
+$$
