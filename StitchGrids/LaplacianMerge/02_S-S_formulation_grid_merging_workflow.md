@@ -52,19 +52,23 @@ $$
 
 If any node within the stencil is $NaN$, the operator outputs $NaN$:
 
-$$\begin{array}{r}
-L_{sea}(i,j) = \left\{ \begin{aligned}
+$$
+L_{sea}(i,j) = 
+\begin{cases}
 \nabla^{2}g_{sea}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j}:\ g_{sea}(m,n) \neq NaN \\
 NaN,\ \  & else
-\end{aligned} \right.\ \ \#(14a)
-\end{array}$$
+\end{cases} 
+\qquad(14a)
+$$
 
-$$\begin{array}{r}
-L_{land}(i,j) = \left\{ \begin{aligned}
-\nabla^{2}g_{land}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j}:\ g_{land}(m,n) \neq NaN \\
+$$
+L_{land}(i,j) = 
+\begin{cases}
+\nabla^{2}g_{land}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j} \:\g_{land}(m,n) \neq NaN \\
 NaN,\ \  & else
-\end{aligned} \right.\ \ \#(14b)
-\end{array}$$
+\end{cases} 
+\qquad(14b)
+$$
 
 Where
 $\delta_{i,j} = \{(i,j);(i + 1,j);(i - 1,j);(i,j + 1);(i,j - 1)\}$.
