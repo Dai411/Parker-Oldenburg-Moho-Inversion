@@ -5,12 +5,12 @@ Dig the overlapped region and interpolate the digged
 - Non-overlapped region keep the original value
 - Avoid the global effect from the Laplacian domain
 
-插值方法平滑性等级:
-    linear            : C⁰ 连续 (一阶导数不连续，有折痕)
-    cubic             : C¹ 连续 (一阶导数连续，二阶不连续)
-    clough_tocher     : C¹ 连续 (三角形剖分，适合不规则边界)
-    rbf (cubic)       : C∞ 连续 (无限光滑，但计算慢)
-    thin_plate_spline : C² 连续 (二阶导数连续，适合地形数据)
+The smoothness of different interpolations:
+    linear            : C⁰ continuous (first derivative discontinuous, has creases/kinks)
+    cubic             : C¹ continuous (first derivative continuous, second derivative discontinuous)
+    clough_tocher     : C¹ continuous (triangulation-based, suitable for irregular boundaries)
+    rbf (cubic)       : C∞ continuous (infinitely smooth, but computationally slow)
+    thin_plate_spline : C² continuous (second derivative continuous, suitable for terrain data)
 
 推荐: clough_tocher (C¹) 或 cubic (C¹)
 """
