@@ -194,7 +194,7 @@ def interpolate_local(L0, gap_mask, padding=30):
 
 # ===== Mian Programme =====
 print("=" * 60)
-print("Step 3+4: Merge Laplacian + Interpolate Gaps (Document 2 Step 3-4)")
+print("Step 3+4: Merge Laplacian + Interpolate Gaps (Document2 Step 3-4)")
 print("=" * 60)
 print(f"\nInterpolation Mode: {INTERP_MODE.upper()}")
 if INTERP_MODE == 'local':
