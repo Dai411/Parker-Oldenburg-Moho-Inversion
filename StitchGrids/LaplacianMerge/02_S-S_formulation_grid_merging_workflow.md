@@ -55,7 +55,7 @@ If any node within the stencil is $NaN$, the operator outputs $NaN$:
 $$
 L_{sea}(i,j) = 
 \begin{cases}
-\nabla^{2}g_{sea}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j}:\ g_{sea}(m,n) \neq NaN \\
+\nabla^{2}g_{sea}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j}\ :\ g_{sea}(m,n) \neq NaN \\
 NaN,\ \  & else
 \end{cases} 
 \qquad(14a)
@@ -64,7 +64,7 @@ $$
 $$
 L_{land}(i,j) = 
 \begin{cases}
-\nabla^{2}g_{land}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j} \:\ g_{land}(m,n) \neq NaN \\
+\nabla^{2}g_{land}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j}\ :\ g_{land}(m,n) \neq NaN \\
 NaN,\ \  & else
 \end{cases} 
 \qquad(14b)
@@ -105,7 +105,7 @@ value is computed using a 4x4 neighbourhood of surrounding valid
 Laplacian nodes:
 
 $$
-L_{int}(x,y) = \sum_{m = 0}^{3}{\sum_{n = 0}^{3}{a_{mn}x^{m}y^{n}}\forall\ x,y \in \Omega_{gap}}
+L_{int}(x,y) = \sum_{m = 0}^{3}{\sum_{n = 0}^{3}{a_{mn}\ x^{m}\ y^{n}\ }\forall\ x,y \in \Omega_{gap}}
 \qquad(16)
 $$
 
