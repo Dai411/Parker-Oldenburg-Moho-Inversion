@@ -64,7 +64,7 @@ $$
 $$
 L_{land}(i,j) = 
 \begin{cases}
-\nabla^{2}g_{land}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j} \:\g_{land}(m,n) \neq NaN \\
+\nabla^{2}g_{land}(i,j),\ \  & if\ \forall\ m,n\  \in \ \delta_{i,j} \:\ g_{land}(m,n) \neq NaN \\
 NaN,\ \  & else
 \end{cases} 
 \qquad(14b)
