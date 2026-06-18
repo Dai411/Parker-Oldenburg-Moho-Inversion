@@ -142,7 +142,8 @@ g_{f}(i,j) = \mathcal{F}^{- 1}\{ \frac{F(k_{x},k_{y})}{H(k_{x},k_{y})} \}\
 \qquad(18)
 $$
 
-**Normally, Don’t use Tikhonov Regularization!**  
+---
+**Normally, Tikhonov Regularization is not necessary!**  
 Note: It will smooth the real data.  
 
 In practice, direct division $H(k_{x},k_{y})$ is problematic at zero
@@ -164,3 +165,4 @@ $$
 H(k) = \max (|H(k)|,\ \varepsilon ) \bullet sign( H(k) )\ 
 \qquad(19b)
 $$
+
