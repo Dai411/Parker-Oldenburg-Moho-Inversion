@@ -34,7 +34,7 @@ from scipy.interpolate import CloughTocher2DInterpolator, griddata
 #       20像素 = 6.0 km (宽带，平滑但耗时)
 GAP_PADDING = 10  # 像素
 
-# 插值方法 (可选: 'clough_tocher', 'cubic', 'linear', 'rbf')
+# Available Interpolation Methods: 'clough_tocher', 'cubic', 'linear', 'rbf')
 #   clough_tocher : C¹ 连续，三角形剖分，推荐 (平衡速度和平滑度)
 #   cubic         : C¹ 连续，griddata 实现，简单稳定
 #   linear        : C⁰ 连续，最快但不平滑
