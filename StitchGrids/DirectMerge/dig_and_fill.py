@@ -12,7 +12,7 @@ The smoothness of different interpolations:
     rbf (cubic)       : C∞ continuous (infinitely smooth, but computationally slow)
     thin_plate_spline : C² continuous (second derivative continuous, suitable for terrain data)
 
-推荐: clough_tocher (C¹) 或 cubic (C¹)
+Recommendations: clough_tocher (C¹) 或 cubic (C¹)
 """
 
 import numpy as np
@@ -22,7 +22,7 @@ from scipy.ndimage import binary_dilation
 from scipy.interpolate import CloughTocher2DInterpolator, griddata
 
 # ============================================================
-# 参数配置 (可调)
+# Controlling Parameters
 # ============================================================
 
 # 拼接带向外扩展宽度 (像素)
