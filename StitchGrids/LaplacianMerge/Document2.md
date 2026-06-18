@@ -1,6 +1,7 @@
 ***Step by Step formulation of the proposed grid-merging workflow***
 ---
--- Originally written by **Marco Ligi**
+-- This document is originally written by **Marco Ligi**;  
+-- **Lining** add the Tikhonov Regularization part.
 
 The object is to merge two discrete gravity anomaly (DGA) fields,
 $g_{sea}(x,y)$ and $g_{land}(x,y)$, sampled on regular grids with size
