@@ -45,9 +45,10 @@ must be calculated independently on each original grid before merging.
 Using a standard 5-point second-order finite difference stencil, the
 discrete Laplacian operator at node $(i,j)$ is defined as:
 
-$$\begin{array}{r}
-\nabla^{2}g_{i,j} = \frac{g_{i + 1,j} - 2g_{i,j} + g_{i - 1,j}}{\mathrm{\Delta}x} + \frac{g_{i,j + 1} - 2g_{i,j} + g_{i,j - 1}}{\mathrm{\Delta}y}\ \#(13)
-\end{array}$$
+$$
+\nabla^{2}g_{i,j} = \frac{g_{i + 1,j} - 2g_{i,j} + g_{i - 1,j}}{\mathrm{\Delta}x} + \frac{g_{i,j + 1} - 2g_{i,j} + g_{i,j - 1}}{\mathrm{\Delta}y}\ 
+\qquad(13)
+$$
 
 If any node within the stencil is $NaN$, the operator outputs $NaN$:
 
