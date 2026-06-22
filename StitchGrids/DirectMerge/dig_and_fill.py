@@ -25,13 +25,13 @@ from scipy.interpolate import CloughTocher2DInterpolator, griddata
 # Controlling Parameters
 # ============================================================
 
-# 拼接带向外扩展宽度 (像素)
-#   建议范围: 3 ~ 20 像素
-#   你的网格间距 300m:
-#       3像素 = 0.9 km (窄带，快速)
-#       5像素 = 1.5 km (中等)
-#       10像素 = 3.0 km (推荐起始值)
-#       20像素 = 6.0 km (宽带，平滑但耗时)
+# Splicing strip width extension (pixels)
+#   Reocommended range: 3~20 pixels
+#   Your grid spacing is 300m (intervals of the .asc):
+#       3  pixels = 0.9 km (Narrow band, fast)
+#       5  pixels = 1.5 km (Medium)
+#       10 pixels = 3.0 km (recommended starting parameter)
+#       20 pixels = 6.0 km (Broad band，smooth but time-consuming)
 GAP_PADDING = 10  # 像素
 
 # Available Interpolation Methods: 'clough_tocher', 'cubic', 'linear', 'rbf')
