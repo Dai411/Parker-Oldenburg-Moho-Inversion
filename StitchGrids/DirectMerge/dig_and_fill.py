@@ -154,25 +154,25 @@ def fill_with_progress(g_final, gap_rows, gap_cols, interpolated, interval=20000
     return g_final, fill_count
 
 # ============================================================
-# 主程序
+# Main Programme
 # ============================================================
 
-# 记录总开始时间
+# Record starting time
 total_start_time = time.time()
 
 print("=" * 60)
-print("拼接带挖掉 + 插值填充法")
+print("Spliced patch removal + interpolation filling")
 print("=" * 60)
-print(f"  拼接带宽度: {GAP_PADDING} 像素 (~{GAP_PADDING * 300 / 1000:.1f} km)")
-print(f"  插值方法: {INTERP_METHOD}")
+print(f"  Width of Spliched Pathc: {GAP_PADDING} Pixels (~{GAP_PADDING * 300 / 1000:.1f} km)")
+print(f"  Interpolation Method: {INTERP_METHOD}")
 if INTERP_METHOD == 'clough_tocher':
-    print(f"    连续性: C¹ (一阶导数连续)")
+    print(f"    Continuity: C¹ (Continuous first derivative)")
 elif INTERP_METHOD == 'cubic':
-    print(f"    连续性: C¹ (一阶导数连续)")
+    print(f"    Continuity: C¹ (Continuous first derivative)")
 elif INTERP_METHOD == 'linear':
-    print(f"    连续性: C⁰ (一阶导数不连续)")
+    print(f"    Continuity: C⁰ (Disontinuous first derivative)")
 elif INTERP_METHOD == 'rbf':
-    print(f"    连续性: C∞ (无限光滑)")
+    print(f"    Continuity: C∞ (Infinitely smooth)")
 print("=" * 60)
 
 # 1. 读取数据
