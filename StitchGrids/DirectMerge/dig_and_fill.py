@@ -175,8 +175,8 @@ elif INTERP_METHOD == 'rbf':
     print(f"    Continuity: C∞ (Infinitely smooth)")
 print("=" * 60)
 
-# 1. 读取数据
-print("\n1. 读取数据...")
+# 1. 
+print("\n1. Reading data...")
 step_start = time.time()
 land_header = read_asc_header(land_file)
 sea_header = read_asc_header(sea_file)
@@ -184,28 +184,28 @@ sea_header = read_asc_header(sea_file)
 land_data = read_asc_grid(land_file, land_header)
 sea_data = read_asc_grid(sea_file, sea_header)
 
-print(f"   Land: {land_data.shape}, 有效点: {np.sum(~np.isnan(land_data))}")
-print(f"   Sea:  {sea_data.shape}, 有效点: {np.sum(~np.isnan(sea_data))}")
-print(f"   耗时: {time.time() - step_start:.2f}s")
+print(f"   Land: {land_data.shape}, Valid points: {np.sum(~np.isnan(land_data))}")
+print(f"   Sea:  {sea_data.shape}, Valid points: {np.sum(~np.isnan(sea_data))}")
+print(f"   Elapsed: {time.time() - step_start:.2f}s")
 
-# 2. 对齐 Sea
-print("\n2. 对齐 Sea 到 Land 网格...")
+# 2. Align two .asc files
+print("\n2. Align Sea to Land grids...")
 step_start = time.time()
 sea_aligned = align_sea_to_land(sea_data, sea_header, land_header)
-print(f"   对齐后 Sea 有效点: {np.sum(~np.isnan(sea_aligned))}")
-print(f"   耗时: {time.time() - step_start:.2f}s")
+print(f"   Valid points after alignment: {np.sum(~np.isnan(sea_aligned))}")
+print(f"   Elapsed: {time.time() - step_start:.2f}s")
 
-# 3. 创建初始复合场
-print("\n3. 创建初始复合场 (Sea 优先)...")
+# 3. Build initial composite filed
+print("\n3. Build composite field (Sea prefered)...")
 step_start = time.time()
 g0 = sea_aligned.copy()
 land_only_mask = np.isnan(sea_aligned) & ~np.isnan(land_data)
 g0[land_only_mask] = land_data[land_only_mask]
-print(f"   初始复合场有效点: {np.sum(~np.isnan(g0))}")
-print(f"   耗时: {time.time() - step_start:.2f}s")
+print(f"   Valid points in the composite field: {np.sum(~np.isnan(g0))}")
+print(f"   Elapsed: {time.time() - step_start:.2f}s")
 
-# 4. 识别拼接带
-print("\n4. 识别拼接带...")
+# 4. Confirm the spliced patch
+print("\n4. Identifying the spliced patch...")
 step_start = time.time()
 land_valid = ~np.isnan(land_data)
 sea_valid = ~np.isnan(sea_aligned)
@@ -217,20 +217,20 @@ boundary = boundary_sea | boundary_land
 gap_mask = binary_dilation(boundary, iterations=GAP_PADDING)
 gap_mask = gap_mask & (land_valid | sea_valid)
 
-print(f"   边界点数: {np.sum(boundary)}")
-print(f"   拼接带点数: {np.sum(gap_mask)}")
-print(f"   拼接带占有效区域: {100 * np.sum(gap_mask) / np.sum(land_valid | sea_valid):.2f}%")
-print(f"   耗时: {time.time() - step_start:.2f}s")
+print(f"   Numbers of border: {np.sum(boundary)}")
+print(f"   Numbers of spliced patch: {np.sum(gap_mask)}")
+print(f"   The ratio of spliced patch: {100 * np.sum(gap_mask) / np.sum(land_valid | sea_valid):.2f}%")
+print(f"   Elapsed: {time.time() - step_start:.2f}s")
 
-# 5. 挖掉拼接带
-print("\n5. 挖掉拼接带...")
+# 5. Remove the patch
+print("\n5. Dig (remove) the overlapped patch...")
 step_start = time.time()
 g_masked = g0.copy()
 g_masked[gap_mask] = np.nan
-print(f"   挖掉后有效点: {np.sum(~np.isnan(g_masked))}")
-print(f"   耗时: {time.time() - step_start:.2f}s")
+print(f"   Valid points after removal: {np.sum(~np.isnan(g_masked))}")
+print(f"   Elapsed: {time.time() - step_start:.2f}s")
 
-# 6. 获取有效数据点
+# 6. Obtain the valid points
 valid_rows, valid_cols = np.where(~np.isnan(g_masked))
 valid_values = g_masked[valid_rows, valid_cols]
 points = np.column_stack([valid_cols, valid_rows])
@@ -238,46 +238,46 @@ points = np.column_stack([valid_cols, valid_rows])
 gap_rows, gap_cols = np.where(gap_mask)
 interp_points = np.column_stack([gap_cols, gap_rows])
 
-print(f"   插值参考点: {len(points):,}")
-print(f"   需要插值点: {len(interp_points):,}")
+print(f"   Interpolation reference point: {len(points):,}")
+print(f"   Points need to be interpolated: {len(interp_points):,}")
 
-# 7. 插值
-print(f"\n6. 插值填充 (方法: {INTERP_METHOD})...")
+# 7. Interpolation
+print(f"\n6. Fill (interpolation) (Method: {INTERP_METHOD})...")
 step_start = time.time()
 
 if INTERP_METHOD == 'clough_tocher':
-    print("   正在构建三角剖分...")
+    print("   Building the triangulation...")
     interp = CloughTocher2DInterpolator(points, valid_values)
-    print("   正在执行插值...")
+    print("   Interpolating...")
     interpolated = interp(interp_points)
     
 elif INTERP_METHOD == 'cubic':
-    print("   正在执行 cubic 插值...")
+    print("   Processing the cubic interpolation...")
     interpolated = griddata(points, valid_values, interp_points, 
                             method='cubic', fill_value=np.nan)
     
 elif INTERP_METHOD == 'linear':
-    print("   正在执行 linear 插值...")
+    print("   Processing the linear interpolatin...")
     interpolated = griddata(points, valid_values, interp_points, 
                             method='linear', fill_value=np.nan)
     
 elif INTERP_METHOD == 'rbf':
     from scipy.interpolate import RBFInterpolator
-    print(f"   正在构建 RBF 插值器 (kernel={RBF_KERNEL})...")
+    print(f"   Buidling the RBF interpolator (kernel={RBF_KERNEL})...")
     rbf = RBFInterpolator(points, valid_values, 
                           kernel=RBF_KERNEL, epsilon=RBF_EPSILON)
-    print("   正在执行插值...")
+    print("   Interpolating...")
     interpolated = rbf(interp_points)
     
 elif INTERP_METHOD == 'thin_plate_spline':
     from scipy.interpolate import RBFInterpolator
-    print(f"   正在构建 Thin Plate Spline 插值器 (C² 连续)...")
+    print(f"   Building the 'Thin Plate Spline' interpolator (C² continous)...")
     rbf = RBFInterpolator(points, valid_values, kernel='thin_plate_spline')
-    print("   正在执行插值...")
+    print("   Interpolating...")
     interpolated = rbf(interp_points)
 
 else:
-    raise ValueError(f"未知插值方法: {INTERP_METHOD}")
+    raise ValueError(f"Unknown interpolating method: {INTERP_METHOD}")
 
 interp_time = time.time() - step_start
 print(f"   插值计算耗时: {interp_time:.2f}s")
