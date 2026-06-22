@@ -32,21 +32,21 @@ from scipy.interpolate import CloughTocher2DInterpolator, griddata
 #       5  pixels = 1.5 km (Medium)
 #       10 pixels = 3.0 km (recommended starting parameter)
 #       20 pixels = 6.0 km (Broad band，smooth but time-consuming)
-GAP_PADDING = 10  # 像素
+GAP_PADDING = 10  # Pixels
 
 # Available Interpolation Methods: 'clough_tocher', 'cubic', 'linear', 'rbf')
-#   clough_tocher : C¹ 连续，三角形剖分，推荐 (平衡速度和平滑度)
-#   cubic         : C¹ 连续，griddata 实现，简单稳定
-#   linear        : C⁰ 连续，最快但不平滑
-#   rbf           : C∞ 连续，最平滑但计算慢 (大数据不推荐)
-INTERP_METHOD = 'clough_tocher'  # 推荐
+#   clough_tocher : C¹ continous， triangulation, recommended (balance in processing speed and smoothness)
+#   cubic         : C¹ continous， implemented with griddata, simple and robust
+#   linear        : C⁰ continous， fastest but not smoothest
+#   rbf           : C∞ conitnous， smoothest but very slow computation (Not recommended for big data)
+INTERP_METHOD = 'clough_tocher'  # Recomended
 
-# 进度显示间隔 (每处理 N 个点输出一次)
-PROGRESS_INTERVAL = 200000  # 每 20 万点输出一次
+# Progress display interval (outputs once every N points processed)
+PROGRESS_INTERVAL = 200000  # Outputs once after processing every 200,000 points
 
-# RBF 参数 (仅当 INTERP_METHOD='rbf' 时使用)
-RBF_KERNEL = 'cubic'     # 核函数: 'cubic', 'thin_plate_spline', 'gaussian'
-RBF_EPSILON = 2.0        # 平滑参数
+# RBF parameters (Using when When INTERP_METHOD='rbf')
+RBF_KERNEL = 'cubic'     # Kernel Function: 'cubic', 'thin_plate_spline', 'gaussian'
+RBF_EPSILON = 2.0        # Smoothing parameter
 
 # ============================================================
 # 文件路径
