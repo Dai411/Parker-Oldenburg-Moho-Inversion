@@ -49,7 +49,7 @@ RBF_KERNEL = 'cubic'     # Kernel Function: 'cubic', 'thin_plate_spline', 'gauss
 RBF_EPSILON = 2.0        # Smoothing parameter
 
 # ============================================================
-# 文件路径
+# File Path
 # ============================================================
 
 data_dir = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly'
@@ -59,7 +59,7 @@ output_dir = 'C:/Users/yangln/Desktop/Postdoc/CNR_Italy/Maps/BouguerAnomaly/Stit
 output_file = os.path.join(output_dir, 'BouguerInterpGap.asc')
 
 # ============================================================
-# 读取函数
+# Data Reading and Writing Function
 # ============================================================
 
 def read_asc_header(filename):
@@ -97,7 +97,7 @@ def write_asc_grid(filename, data, header):
             f.write(' '.join(f"{val:.6f}" for val in output_data[row]) + '\n')
 
 def align_sea_to_land(sea_data, sea_header, land_header):
-    """将 Sea 对齐到 Land 网格"""
+    """Align the Sea to Land grids"""
     land_nrows = land_header['nrows']
     land_ncols = land_header['ncols']
     land_xmin = land_header['xllcorner']
@@ -125,13 +125,13 @@ def align_sea_to_land(sea_data, sea_header, land_header):
     return aligned
 
 # ============================================================
-# 带进度的填充函数
+# Filling Function with progress
 # ============================================================
 
 def fill_with_progress(g_final, gap_rows, gap_cols, interpolated, interval=200000):
-    """带进度显示的填充"""
+    """Fill (interpolate) with progress"""
     n_points = len(gap_rows)
-    print(f"   开始填充 {n_points:,} 个点 (每 {interval:,} 点输出一次进度)...")
+    print(f"   Start filling {n_points:,} points (outputting progress every {interval:,} points)...")
     
     fill_count = 0
     last_progress = 0
@@ -141,14 +141,14 @@ def fill_with_progress(g_final, gap_rows, gap_cols, interpolated, interval=20000
             g_final[r, c] = interpolated[idx]
             fill_count += 1
         
-        # 进度显示
+        # Displaying interpolation progress
         if (idx + 1) % interval == 0 or idx + 1 == n_points:
             progress_pct = 100 * (idx + 1) / n_points
             elapsed = time.time() - fill_start_time
             rate = (idx + 1) / elapsed if elapsed > 0 else 0
             remaining = (n_points - idx - 1) / rate if rate > 0 else 0
-            print(f"      进度: {idx+1:,}/{n_points:,} ({progress_pct:.1f}%) "
-                  f"耗时: {elapsed:.1f}s 剩余: {remaining:.1f}s")
+            print(f"      Prohress: {idx+1:,}/{n_points:,} ({progress_pct:.1f}%) "
+                  f"Elapsed: {elapsed:.1f}s Remaining: {remaining:.1f}s")
             last_progress = idx + 1
     
     return g_final, fill_count
