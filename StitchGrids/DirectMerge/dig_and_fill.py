@@ -12,7 +12,7 @@ The smoothness of different interpolations:
     rbf (cubic)       : C∞ continuous (infinitely smooth, but computationally slow)
     thin_plate_spline : C² continuous (second derivative continuous, suitable for terrain data)
 
-Recommendations: clough_tocher (C¹) 或 cubic (C¹)
+Recommendations: clough_tocher (C¹) or cubic (C¹)
 """
 
 import numpy as np
@@ -280,32 +280,32 @@ else:
     raise ValueError(f"Unknown interpolating method: {INTERP_METHOD}")
 
 interp_time = time.time() - step_start
-print(f"   插值计算耗时: {interp_time:.2f}s")
+print(f"   Elapsed time in interpolation: {interp_time:.2f}s")
 
-# 8. 带进度显示的填充
-print("\n7. 填充拼接带...")
+# 8. Filling with printing the progress
+print("\n7. Filling the spliced patch...")
 fill_start_time = time.time()
 g_final = g0.copy()
 g_final, fill_count = fill_with_progress(g_final, gap_rows, gap_cols, 
                                           interpolated, PROGRESS_INTERVAL)
 fill_time = time.time() - fill_start_time
-print(f"   填充耗时: {fill_time:.2f}s")
-print(f"   成功填充: {fill_count:,} / {len(interp_points):,}")
+print(f"   Elapsed time in interpolation: {fill_time:.2f}s")
+print(f"   Interpolating successfully: {fill_count:,} / {len(interp_points):,}")
 
-# 9. 验证
+# 9. Validation
 non_gap = ~gap_mask & ~np.isnan(g0)
 if np.allclose(g_final[non_gap], g0[non_gap], equal_nan=True):
-    print("   ✓ 验证通过: 非拼接带完全保留原始值")
+    print("   ✓ Validation passed: Non-splicing band retains the original value completely")
 else:
-    print("   ⚠ 警告: 非拼接带被意外修改")
+    print("   ⚠ Warning: Non-splicing band was accidentally modified")
 
-# 10. 统计结果
-print("\n8. 结果统计:")
-print(f"   最终有效点: {np.sum(~np.isnan(g_final))}")
-print(f"   最小值: {np.nanmin(g_final):.2f} mGal")
-print(f"   最大值: {np.nanmax(g_final):.2f} mGal")
-print(f"   平均值: {np.nanmean(g_final):.2f} mGal")
-print(f"   标准差: {np.nanstd(g_final):.6f} mGal")
+# 10. Staticts
+print("\n8. Results statics:")
+print(f"   Final valid points: {np.sum(~np.isnan(g_final))}")
+print(f"   Min: {np.nanmin(g_final):.2f} mGal")
+print(f"   Max: {np.nanmax(g_final):.2f} mGal")
+print(f"   Mean: {np.nanmean(g_final):.2f} mGal")
+print(f"   Std: {np.nanstd(g_final):.6f} mGal")
 
 # 分区域统计
 land_only = ~np.isnan(land_data) & np.isnan(sea_aligned)
