@@ -307,25 +307,25 @@ print(f"   Max: {np.nanmax(g_final):.2f} mGal")
 print(f"   Mean: {np.nanmean(g_final):.2f} mGal")
 print(f"   Std: {np.nanstd(g_final):.6f} mGal")
 
-# 分区域统计
+# Regional Statistics
 land_only = ~np.isnan(land_data) & np.isnan(sea_aligned)
 sea_only = ~np.isnan(sea_aligned) & np.isnan(land_data)
 overlap = ~np.isnan(land_data) & ~np.isnan(sea_aligned)
 
-print(f"\n   纯陆区均值: {np.nanmean(g_final[land_only]):.2f} mGal (原始: {np.nanmean(land_data[land_only]):.2f})")
-print(f"   纯海区均值: {np.nanmean(g_final[sea_only]):.2f} mGal (原始: {np.nanmean(sea_aligned[sea_only]):.2f})")
-print(f"   重叠区均值: {np.nanmean(g_final[overlap]):.2f} mGal")
+print(f"\n   Mean of land-only area: {np.nanmean(g_final[land_only]):.2f} mGal (Original: {np.nanmean(land_data[land_only]):.2f})")
+print(f"   Mean of sea-only area:{np.nanmean(g_final[sea_only]):.2f} mGal (Original: {np.nanmean(sea_aligned[sea_only]):.2f})")
+print(f"   Mean of overlapping area: {np.nanmean(g_final[overlap]):.2f} mGal")
 
-# 11. 保存
-print("\n9. 保存结果...")
+# 11. Save
+print("\n9. Saving results...")
 step_start = time.time()
 write_asc_grid(output_file, g_final, land_header)
-print(f"   ✓ 已保存: {output_file}")
-print(f"   耗时: {time.time() - step_start:.2f}s")
+print(f"   ✓ File saved: {output_file}")
+print(f"   Elapsed: {time.time() - step_start:.2f}s")
 
-# 12. 总耗时统计
+# 12. Total time used 
 total_time = time.time() - total_start_time
 print("\n" + "=" * 60)
-print(f"✅ 拼接带插值填充完成！")
-print(f"   总耗时: {total_time:.2f}s ({total_time/60:.1f} 分钟)")
+print(f"✅ Concatenation with interpolation complete!")
+print(f"   Total time elapsed: {total_time:.2f}s ({total_time/60:.1f} minutes)")
 print("=" * 60)
