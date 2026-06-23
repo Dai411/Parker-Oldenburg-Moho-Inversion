@@ -249,7 +249,7 @@ This formulation produces the **smoothest possible surface** (minimum curvature)
 
 ---
 
-## Parameter Selection Guide
+## Parameter Selection Guide (dig_and_fill.py)
 
 ### For `GAP_PADDING` (splicing strip width)
 
@@ -281,4 +281,45 @@ This formulation produces the **smoothest possible surface** (minimum curvature)
 ---
 
 ## Algorithm Selection Decision Tree
+```mermaid
+flowchart TD
+    A[Start] --> B{Data size > 100,000 points?}
+    
+    B -->|YES| C{Are you doing<br>terrain modeling?}
+    C -->|YES| D[Use <b>clough_tocher</b> ★]
+    C -->|NO| E[Use <b>cubic</b>]
+    
+    B -->|NO| F{Data size < 10,000 points?}
+    F -->|YES| G{Need smooth<br>curvature?}
+    G -->|YES| H[Use <b>RBF</b><br>(thin_plate_spline) ★]
+    G -->|NO| I[Use <b>clough_tocher</b>]
+    
+    F -->|NO| J[Use <b>clough_tocher</b>]
+    
+    B -->|NO| K{Need extremely<br>fast processing?}
+    K -->|YES| L[Use <b>linear</b><br>(visual quality sacrificed)]
+    K -->|NO| M[Use <b>clough_tocher</b><br>(recommended)]
+```
+
+---
+
+## Quick Reference Card
+
+```python
+# Recommended configuration for most users:
+GAP_PADDING = 10                 # 3.0 km overlap
+INTERP_METHOD = 'clough_tocher'  # Best balance
+PROGRESS_INTERVAL = 200000
+
+# For terrain data (small dataset):
+INTERP_METHOD = 'rbf'
+RBF_KERNEL = 'thin_plate_spline'
+RBF_EPSILON = 2.0
+
+# For speed-critical applications:
+INTERP_METHOD = 'cubic'   # or 'linear' for fastest
+GAP_PADDING = 3           # Minimal overlap  
+```
+## Main Reference
+
 
