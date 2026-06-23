@@ -1,5 +1,7 @@
 ## Why Do We Need to Stitch?
 
+Languages: [English](./README.md) | [Chinese (simpled)](./README_CN.md) 
+
 ### Background: Three Sources of Gravity Data
 
 Our study involves three sets of gravity data:
