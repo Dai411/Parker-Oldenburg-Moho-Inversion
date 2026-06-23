@@ -96,9 +96,8 @@ def compare_land_final(land_data, final_data, land_only_mask):
 
 def print_region_stats(name, data):
     """Print summary statistics for a grid."""
-    print(f"{name} shape: {data.shape}, \nvalid cells: {np.sum(~np.isnan(data)):,}")
-    print(f"  Range: min={np.nanmin(data):.2f}, \nmax={np.nanmax(data):.2f}, \nmean={np.nanmean(data):.2f}\n"
-    )
+    print(f"{name} shape: {data.shape}, valid cells: {np.sum(~np.isnan(data)):,}")
+    print(f"  Range: min={np.nanmin(data):.2f}, max={np.nanmax(data):.2f}, mean={np.nanmean(data):.2f}\n")
 
 
 def parse_args():
