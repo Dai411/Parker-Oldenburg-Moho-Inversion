@@ -1,5 +1,7 @@
 # LaplacianMerge Workflow — Merging Marine/Land Bouguer Anomaly Grids (Summary)
 
+[中文文档](./README_CN.md) | [English](./README.md)
+
 This directory contains scripts for merging marine/land gravity grids in the Laplacian domain (scripts are numbered sequentially from 0 to 6). Technical details and theoretical foundations are provided in `Document2.md` in the same directory.
 
 **Core idea:** Compute the Laplacian separately on each original grid (to avoid singularities at stitch lines where artificial differences occur), merge the Laplacians using a priority rule (marine priority), fill gaps (interpolation), then solve the inverse problem in the frequency domain to obtain the final Bouguer anomaly field.
