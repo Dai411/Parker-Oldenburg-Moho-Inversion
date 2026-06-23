@@ -127,6 +127,3 @@
 
 ---
 
-若你希望，我可以：
-- 将此 README.md 直接提交到仓库相应目录（需要我进行 create/update 文件操作）；或者
-- 帮你修正 `6_validate_bouguer_merge.py` 中识别到的小语法/格式问题并提交修复补丁。
