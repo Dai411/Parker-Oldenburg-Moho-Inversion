@@ -285,22 +285,21 @@ This formulation produces the **smoothest possible surface** (minimum curvature)
 flowchart TD
     A[Start] --> B{Data size > 100,000 points?}
     
-    B -->|YES| C{Are you doing<br>terrain modeling?}
-    C -->|YES| D[Use <b>clough_tocher</b> ★]
-    C -->|NO| E[Use <b>cubic</b>]
+    B -->|YES| C{Are you doing terrain modeling?}
+    C -->|YES| D[Use clough_tocher ★]
+    C -->|NO| E[Use cubic]
     
     B -->|NO| F{Data size < 10,000 points?}
-    F -->|YES| G{Need smooth<br>curvature?}
-    G -->|YES| H[Use <b>RBF</b><br>(thin_plate_spline) ★]
-    G -->|NO| I[Use <b>clough_tocher</b>]
+    F -->|YES| G{Need smooth curvature?}
+    G -->|YES| H[Use RBF (thin_plate_spline) ★]
+    G -->|NO| I[Use clough_tocher]
     
-    F -->|NO| J[Use <b>clough_tocher</b>]
+    F -->|NO| J[Use clough_tocher]
     
-    B -->|NO| K{Need extremely<br>fast processing?}
-    K -->|YES| L[Use <b>linear</b><br>(visual quality sacrificed)]
-    K -->|NO| M[Use <b>clough_tocher</b><br>(recommended)]
+    B -->|NO| K{Need extremely fast processing?}
+    K -->|YES| L[Use linear (visual quality sacrificed)]
+    K -->|NO| M[Use clough_tocher (recommended)]
 ```
-
 ---
 
 ## Quick Reference Card
