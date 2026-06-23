@@ -7,7 +7,7 @@ Our study involves three sets of gravity data:
 1. **Parker forward modeling results**: "Correct" gravity anomalies obtained by stripping off sedimentary layers
    (strata-corrected, not free-air anomalies).
 3. **Onshore gravity anomaly data**: Ground-measured gravity data (free-air anomalies).
-4. **Marine free-air anomalies**: Satellite/ shipborne data (free-air anomalies).
+4. **Free-air Bougurer anomalies**: Satellite/ shipborne data (free-air anomalies).
 
 **Note**: All `.asc` files must use the same projected coordinate system.
 
