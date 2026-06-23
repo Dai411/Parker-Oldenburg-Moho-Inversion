@@ -283,22 +283,22 @@ This formulation produces the **smoothest possible surface** (minimum curvature)
 ## Algorithm Selection Decision Tree
 ```mermaid
 flowchart TD
-    A[Start] --> B{Data size > 100,000 points?}
+    A[Start] --> B{"Data size > 100,000 points?"}
     
-    B -->|YES| C{Are you doing terrain modeling?}
-    C -->|YES| D[Use clough_tocher ★]
-    C -->|NO| E[Use cubic]
+    B -->|YES| C{"Are you doing terrain modeling?"}
+    C -->|YES| D["Use clough_tocher ★"]
+    C -->|NO| E["Use cubic"]
     
-    B -->|NO| F{Data size < 10,000 points?}
-    F -->|YES| G{Need smooth curvature?}
-    G -->|YES| H[Use RBF (thin_plate_spline) ★]
-    G -->|NO| I[Use clough_tocher]
+    B -->|NO| F{"Data size < 10,000 points?"}
+    F -->|YES| G{"Need smooth curvature?"}
+    G -->|YES| H["Use RBF (thin_plate_spline) ★"]
+    G -->|NO| I["Use clough_tocher"]
     
-    F -->|NO| J[Use clough_tocher]
+    F -->|NO| J["Use clough_tocher"]
     
-    B -->|NO| K{Need extremely fast processing?}
-    K -->|YES| L[Use linear (visual quality sacrificed)]
-    K -->|NO| M[Use clough_tocher (recommended)]
+    B -->|NO| K{"Need extremely fast processing?"}
+    K -->|YES| L["Use linear (visual quality sacrificed)"]
+    K -->|NO| M["Use clough_tocher (recommended)"]
 ```
 ---
 
