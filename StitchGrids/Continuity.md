@@ -320,5 +320,11 @@ INTERP_METHOD = 'cubic'   # or 'linear' for fastest
 GAP_PADDING = 3           # Minimal overlap  
 ```
 ## Main Reference
-
-
+1. Clough, R.W. and Tocher, J.L. (1965) Finite Element Stiffness Matrices for Analysis of Plates in Bending.
+   Proceedings of Conference on Matrix Methods in Structural Analysis, 1, 515-545.
+   https://digital2.library.iit.edu/files//original/63b24ac9b262020f57af2a3e56b76b2c87e9f3c4.pdf
+2. Franke, R. (1982) Scattered Data Interpolation: Tests of Some Methods. Mathematics of Computation, 38, 181-200.
+   https://doi.org/10.1090/S0025-5718-1982-0637296-4
+3. Wahba, G. (1990). Spline models for observational data. Society for industrial and applied mathematics.
+4. Amidror, I. (2002). Scattered data interpolation methods for electronic imaging systems: a survey.
+   Journal of electronic imaging, 11(2), 157-176.
