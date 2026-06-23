@@ -1,5 +1,7 @@
 # LaplacianMerge 工作流 — 合并海/陆 Bouguer 异常网格 (概要)
 
+[English Version](./README.md)
+
 该目录包含用于在 Laplacian 域合并海/陆重力网格的脚本（顺序按 0 -> 6 编号）。技术细节与理论依据见同目录下的 `Document2.md`。  
 总体思路：先在原始网格上分别计算 Laplacian（避免缝合线在人为差异处产生奇异），按优先规则（海优先）合并 Laplacian，补洞（插值填充），再在频率域求解反演得到最终 Bouguer 异常场。  
 
