@@ -115,7 +115,7 @@ def parse_args():
                         help='Path to corrected output file (used with --correct)')
     parser.add_argument('--correct', action='store_true',
                         help='Calculate and save a corrected final grid based on land-only offset')
-    parser.add_argument('--threshold', type=float, default=1.0
+    parser.add_argument('--threshold', type=float, default=1.0,
                         help='Acceptable mean difference threshold in land-only region (mGal)')
     return parser.parse_args()
 
@@ -159,11 +159,9 @@ def main():
     print(f'  Maximum difference: {stats["max"]:.6f} mGal')
 
     if abs(stats['mean']) < args.threshold:
-        print(f'\n✓ Mean difference is below {args.threshold} mGal.
-            \nNo significant offset is detected in the land-only region.')
+        print(f"\n✓ Mean difference is below {args.threshold} mGal.\nNo significant offset is detected in the land-only region.")
     else:
-        print(f'\n⚠ Warning: Mean difference = f'{stats["mean"]:.6f} mGal. 
-            \nA systematic offset may exist.')
+        print(f"\n⚠ Warning: Mean difference = {stats['mean']:.6f} mGal.\nA systematic offset may exist.")
 
     if args.correct:
         print('\nComputing correction offset and saving output...')
