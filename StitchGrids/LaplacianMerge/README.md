@@ -1,6 +1,7 @@
 # LaplacianMerge Workflow — Merging Marine/Land Bouguer Anomaly Grids (Summary)
 
-[中文文档](./README_CN.md) | [English](./README.md)
+Languages: [English](./README.md) | [Chinese (simpled)](./README_CN.md) 
+
 
 This directory contains scripts for merging marine/land gravity grids in the Laplacian domain (scripts are numbered sequentially from 0 to 6). Technical details and theoretical foundations are provided in `Document2.md` in the same directory.
 
