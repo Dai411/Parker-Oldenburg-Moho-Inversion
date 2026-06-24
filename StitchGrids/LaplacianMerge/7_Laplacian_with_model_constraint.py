@@ -1,7 +1,37 @@
 """
 7_Laplacian_with_model_constraint.py
 
-Enhanced model-constraint workflow:
+Usage and CLI docstring moved to file header. This script applies a large-scale model constraint
+(e.g., ICGEM BouguerModelled.asc) to a merged/interpolated Laplacian grid to preserve large-scale
+trends and avoid inversion-induced "flattening" of extrema.
+
+Typical place in workflow: after 3_merge_and_interpolate_dual.py (which produces L_FilledLaplacian.asc)
+and before 5_frequency_inversion.py. The script aligns grids, identifies core/transition/external
+regions, estimates boundary offsets, and blends model and observed Laplacian in the transition band.
+
+Example usage:
+  python 7_Laplacian_with_model_constraint.py \
+    --laplacian L_FilledLaplacian.asc \
+    --our L_FilledLaplacian.asc \
+    --model BouguerModelled.asc \
+    --output BouguerLaplacianConstrained.asc \
+    --transition-sigma 20 --safety-padding 10 --boundary-width 5
+
+Defaults:
+  --laplacian: L_FilledLaplacian.asc
+  --our: L_FilledLaplacian.asc
+  --model: BouguerModelled.asc
+  --output: BouguerLaplacianConstrained.asc
+  --transition-sigma: 20
+  --safety-padding: 10
+  --boundary-width: 5
+
+Notes:
+- The script uses the model to constrain low-frequency components in the source domain (Laplacian).
+- Keep transition-sigma small if model and data have similar resolution; increase it if the model is
+  much smoother than the observations.
+
+Updates: Enhanced model-constraint workflow:
 - Automatically detect whether the merged Laplacian (L_FilledLaplacian.asc) aligns to the model grid.
 - If not aligned, provide a gdalwarp suggestion and (optionally with --fix and rasterio installed) perform resampling to the model grid.
 - If the provided model is Bouguer values (default), compute its Laplacian on the model grid and use that as the external constraint.
