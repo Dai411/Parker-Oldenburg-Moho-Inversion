@@ -40,38 +40,3 @@
 
 **简言之**：拼接的目的是为反演创建一个**统一基准、规则范围、适当分辨率**的重力异常网格。
 这不仅解决了多源数据的不兼容性，也为后续的 Moho 深度反演提供了稳定的输入。
-
-
----
-
-### 新增：在 Laplacian 域使用模型约束（可选）
-
-当存在可靠的大尺度模型（例如 ICGEM 的 BouguerModelled.asc）时，建议在合并并插值后的 Laplacian（L_FilledLaplacian.asc）上应用模型约束，然后再进行频率域反演。
-
-- 原理：ICGEM 模型分辨率较低但能很好描述大尺度趋势。若直接将合并的 Laplacian 反演回 Bouguer 场，反演过程可能因频谱处理导致全场“平均化”——高值被拉低、低值被抬高。将模型约束应用在源域能钉住低频/背景分量，保留观测数据在局部（核心区）的高频信息。
-
-- 建议流程位置：在 `3_merge_and_interpolate_dual.py`（生成 `L_FilledLaplacian.asc`）之后，`5_frequency_inversion.py` 之前运行模型约束脚本（`7_Laplacian_with_model_constraint.py`），该脚本输出 `BouguerLaplacianConstrained.asc`，随后将其传入 `5_frequency_inversion.py` 进行反演。
-
-- 推荐示例命令：
-  ```bash
-  python 7_Laplacian_with_model_constraint.py \
-    --laplacian L_FilledLaplacian.asc \
-    --our L_FilledLaplacian.asc \
-    --model BouguerModelled.asc \
-    --output BouguerLaplacianConstrained.asc \
-    --transition-sigma 20 --safety-padding 10 --boundary-width 5
-  ```
-
-- 参数建议（基于 cellsize=300m 的示例）：
-  - `--transition-sigma`: 10–50（像素）；10≈3km，50≈15km，视模型分辨率与观测差异而定。
-  - `--safety-padding`: 5–20（像素），定义核心区保持观测信息，不被模型覆盖。
-  - `--boundary-width`: 3–10（像素），用于估计边界层的模型偏差。
-
-- 可视化与检查项：
-  - 边界层差异（model - laplacian）地图与统计（均值、标准差）。
-  - 过渡带权重场与横断面剖面图，检查混合是否平滑。
-  - 运行 `5_frequency_inversion.py` 前后比较未约束与约束后反演结果的差异（全场与局部）。
-
-- 风险提示：
-  - 若模型包含系统误差或参考面不同，过度依赖模型可能掩盖真实局部信号。建议保守选择过渡带宽及权重，并先检查 boundary_diff 统计值。
-
