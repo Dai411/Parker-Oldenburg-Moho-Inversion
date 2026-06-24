@@ -137,11 +137,11 @@ def main():
     BOUNDARY_WIDTH = args.boundary_width
 
     print("=" * 60)
-    print("Laplacian 域结果 + 模型数据约束校正 (CLI 版)")
+    print("Laplacian field + model-constraint correction (CLI)")
     print("=" * 60)
 
-    # 1. 读取数据和 header
-    print("\n1. 读取数据...")
+    # 1. Read data and headers
+    print("\n1. Reading input files...")
     model_header = read_asc_header(model_file)
     our_header = read_asc_header(our_file)
     lap_header = read_asc_header(laplacian_file)
@@ -150,20 +150,20 @@ def main():
     our_data = read_asc_grid(our_file, our_header)
     lap_data = read_asc_grid(laplacian_file, lap_header)
 
-    print(f"   模型数据: {model_data.shape}, 有效点: {np.sum(~np.isnan(model_data))}")
-    print(f"   我们的数据: {our_data.shape}, 有效点: {np.sum(~np.isnan(our_data))}")
-    print(f"   Laplacian结果: {lap_data.shape}, 有效点: {np.sum(~np.isnan(lap_data))}")
+    print(f"   Model data: {model_data.shape}, valid cells: {np.sum(~np.isnan(model_data))}")
+    print(f"   Our data: {our_data.shape}, valid cells: {np.sum(~np.isnan(our_data))}")
+    print(f"   Laplacian: {lap_data.shape}, valid cells: {np.sum(~np.isnan(lap_data))}")
 
-    # 2.  对齐到模型网格
-    print("\n2. 对齐到模型网格...")
+    # 2. Align to model grid
+    print("\n2. Aligning grids to model grid...")
     our_aligned = align_grid_to_model(our_data, our_header, model_header)
     lap_aligned = align_grid_to_model(lap_data, lap_header, model_header)
 
-    print(f"   对齐后我们的数据有效点: {np.sum(~np.isnan(our_aligned))}")
-    print(f"   对齐后Laplacian有效点: {np.sum(~np.isnan(lap_aligned))}")
+    print(f"   Our aligned valid cells: {np.sum(~np.isnan(our_aligned))}")
+    print(f"   Laplacian aligned valid cells: {np.sum(~np.isnan(lap_aligned))}")
 
-    # 3. 识别各区域
-    print("\n3. 识别区域...")
+    # 3. Identify regions
+    print("\n3. Identifying regions...")
     our_valid_mask = ~np.isnan(our_aligned)
     core_mask = binary_erosion(our_valid_mask, iterations=SAFETY_PADDING)
     boundary_mask = binary_dilation(our_valid_mask, iterations=BOUNDARY_WIDTH) & ~our_valid_mask
@@ -171,40 +171,40 @@ def main():
     external_mask = ~np.isnan(model_data) & ~our_valid_mask
     transition_mask = our_valid_mask & ~core_mask
 
-    print(f"   核心区点数: {np.sum(core_mask)}")
-    print(f"   过渡带点数: {np.sum(transition_mask)}")
-    print(f"   边界层点数 (用于估算): {np.sum(boundary_mask)}")
-    print(f"   外部区域点数: {np.sum(external_mask)}")
+    print(f"   Core cells: {np.sum(core_mask)}")
+    print(f"   Transition cells: {np.sum(transition_mask)}")
+    print(f"   Boundary-layer cells (for offset estimate): {np.sum(boundary_mask)}")
+    print(f"   External region cells: {np.sum(external_mask)}")
 
-    # 4. 估计外部偏移
-    print("\n4. 计算外部区域校正量...")
+    # 4. Estimate external offset
+    print("\n4. Estimating offset in the external region...")
     if np.sum(boundary_mask) > 0:
         boundary_diff = model_data[boundary_mask] - lap_aligned[boundary_mask]
         offset_global = np.nanmean(boundary_diff)
         offset_std = np.nanstd(boundary_diff)
-        print(f"   边界层差异 (模型 - Laplacian): 均值 = {offset_global:.4f}, 标准差 = {offset_std:.4f}")
+        print(f"   Boundary-layer difference (model - laplacian): mean = {offset_global:.4f}, std = {offset_std:.4f}")
     else:
-        print("   警告: 边界层为空，使用默认偏移 0")
+        print("   Warning: boundary layer is empty; using offset = 0")
         offset_global = 0.0
 
-    # 5. 创建过渡权重
-    print("\n5. 创建过渡权重...")
+    # 5. Create transition weights
+    print("\n5. Creating transition weight field...")
     weight_initial = np.zeros_like(model_data, dtype=float)
     weight_initial[core_mask] = 1.0
     weight_smooth = gaussian_filter(weight_initial, sigma=TRANSITION_SIGMA)
     weight_smooth = np.clip(weight_smooth, 0.0, 1.0)
     weight_smooth[core_mask] = 1.0
-    print(f"   权重范围: [{np.nanmin(weight_smooth):.4f}, {np.nanmax(weight_smooth):.4f}]")
+    print(f"   Weight range: [{np.nanmin(weight_smooth):.4f}, {np.nanmax(weight_smooth):.4f}]")
 
-    # 6. 应用校正并生成被约束场
-    print("\n6. 应用模型约束校正...")
+    # 6. Apply correction and generate constrained field
+    print("\n6. Applying model-constraint correction...")
     offset_field = offset_global * (1.0 - weight_smooth)
     g_corrected = lap_aligned.copy()
 
-    # 在外部区域直接用模型值
+    # external region: use model values
     g_corrected[external_mask] = model_data[external_mask]
 
-    # 过渡带混合
+    # transition: blend model and laplacian using weight
     transition_rows, transition_cols = np.where(transition_mask)
     for r, c in zip(transition_rows, transition_cols):
         w = weight_smooth[r, c]
@@ -219,31 +219,31 @@ def main():
 
     g_corrected[core_mask] = lap_aligned[core_mask]
 
-    # 7. 统计与验证
-    print("\n7. 结果统计:")
-    print(f"\n   校正前 Laplacian 全场均值: {np.nanmean(lap_aligned):.4f}")
+    # 7. Statistics and verification
+    print("\n7. Statistics:")
+    print(f"\n   Pre-correction Laplacian global mean: {np.nanmean(lap_aligned):.4f}")
     if np.sum(core_mask) > 0:
-        print(f"   校正前核区均值: {np.nanmean(lap_aligned[core_mask]):.4f}")
-    print(f"\n   校正后 全场均值: {np.nanmean(g_corrected):.4f}")
+        print(f"   Pre-correction core mean: {np.nanmean(lap_aligned[core_mask]):.4f}")
+    print(f"\n   Post-correction global mean: {np.nanmean(g_corrected):.4f}")
     if np.sum(core_mask) > 0:
-        print(f"   校正后核区均值: {np.nanmean(g_corrected[core_mask]):.4f}")
+        print(f"   Post-correction core mean: {np.nanmean(g_corrected[core_mask]):.4f}")
     if np.sum(external_mask) > 0:
-        print(f"   外部区域均值: {np.nanmean(g_corrected[external_mask]):.4f}")
+        print(f"   External region mean: {np.nanmean(g_corrected[external_mask]):.4f}")
 
     if np.sum(core_mask) > 0:
         core_unchanged = np.allclose(g_corrected[core_mask], lap_aligned[core_mask], equal_nan=True)
-        print(f"   核心区保持不变: {'✓ 通过' if core_unchanged else '✗ 失败'}")
+        print(f"   Core unchanged: {'✓ PASS' if core_unchanged else '✗ FAIL'}")
 
     if np.sum(external_mask) > 0:
         external_match = np.allclose(g_corrected[external_mask], model_data[external_mask], equal_nan=True, rtol=1e-5)
-        print(f"   外部区域等于模型: {'✓ 通过' if external_match else '✗ 失败'}")
+        print(f"   External matches model: {'✓ PASS' if external_match else '✗ FAIL'}")
 
-    # 8. 保存
-    print("\n8. 保存结果...")
+    # 8. Save
+    print("\n8. Saving result...")
     write_asc_grid(output_file, g_corrected, model_header)
-    print(f"   ✓ 已保存: {output_file}")
+    print(f"   ✓ Saved: {output_file}")
     print("\n" + "=" * 60)
-    print("✅ Laplacian + 模型约束完成！")
+    print("✅ Laplacian + model-constraint complete!")
     print("=" * 60)
 
 
