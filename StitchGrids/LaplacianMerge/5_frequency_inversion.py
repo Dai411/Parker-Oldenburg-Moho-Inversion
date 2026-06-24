@@ -113,9 +113,12 @@ def main():
     print('=' * 60)
 
     print('\n1. Read data from .asc file...')
-    header = read_asc_header(args.header)
+    # header = read_asc_header(args.header)
+    header = read_asc_header(args.input)
+    print(f'   ✓ Using the header from INPUT: {header["nrows"]}x{header["ncols"]}')
+    print(f'   ✓ Coordinates: X [{header["xllcorner"]:.0f}, {header["xllcorner"] + header["ncols"] * header["cellsize"]:.0f}], '
+          f'Y [{header["yllcorner"]:.0f}, {header["yllcorner"] + header["nrows"] * header["cellsize"]:.0f}]')
     L_data = read_asc_grid(args.input)
-
     ny, nx = L_data.shape
     dx = header['cellsize']
     dy = header['cellsize']
