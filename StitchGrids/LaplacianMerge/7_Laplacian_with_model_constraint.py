@@ -103,7 +103,7 @@ def write_asc_grid(filename, data, header):
 def is_integer_multiple(diff: float, cellsize: float, tol: float = 1e-6):
     try:
         q = diff / cellsize
-n    except Exception:
+    except Exception:
         return False, 0
     nearest = round(q)
     return abs(q - nearest) <= tol, int(nearest)
