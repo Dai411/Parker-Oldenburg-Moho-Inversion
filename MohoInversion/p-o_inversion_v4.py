@@ -1,4 +1,4 @@
-# parker_oldenburg_inversion_v4.py
+# p-o_inversion_v4.py
 """
 Parker-Oldenburg 迭代反演 Moho 深度 (v4: 集成 RF 地震约束)
 相对于 v3 的改进:
