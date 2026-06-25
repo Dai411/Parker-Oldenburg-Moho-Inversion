@@ -1,6 +1,6 @@
-# parker_oldenburg_inversion_final_fixed.py
+# p-o_inversion_v2.py
 """
-Parker-Oldenburg 迭代反演 Moho 深度 (终极修复版)
+Parker-Oldenburg 迭代反演 Moho 深度，相对于初始版本，
 加入: NaN 插值填补, 最优 FFT 扩边 (Padding), 以及余弦平滑衰减 (Tapering)
 
 参考文献:
