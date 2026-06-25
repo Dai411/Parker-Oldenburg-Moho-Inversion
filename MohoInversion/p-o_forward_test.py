@@ -1,6 +1,6 @@
 # test_parker_forward_v2.py
 """
-Parker-Oldenburg 正演测试 (修正版 - h 为起伏)
+Parker-Oldenburg 正演测试 (- h 为起伏)
 """
 
 import numpy as np
