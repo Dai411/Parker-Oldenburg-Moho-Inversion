@@ -6,9 +6,9 @@
 
 Receiver Function data provide localized seismic estimates of crustal thickness at sparse continental stations. For each RF station \(S_{i}\), a residual between the observed seismic Moho depth and the current gravity-derived Moho model was computed as:
 
-\[
-r_{k} = H_{RF}(s_{k}) - H_{est}(s_{k}) \quad (1)
-\]
+$$
+r_{k} = H_{RF}(s_{k}) - H_{est}(s_{k}) \qquad (1)
+$$
 
 where:
 
