@@ -93,6 +93,20 @@ where $\gamma > 1$ controls the spatial localization of the RF influence.
 
 Increasing $\gamma$ produces a more rapid decay of RF influence away from seismic stations, effectively confining the seismic constraint to continental domains directly supported by RF observations.
 
+This formulation behaves as a geographically adaptive regularization scheme in which the relative contribution of seismic information varies continuously according to observational coverage. The final RF correction field becomes:
+
+$$
+R_{RF}(x,y) = \beta(x,y) \  R(x,y) 
+\qquad (8)
+$$
+
+Thus:
+
+- near RF stations, $\beta(x,y) \approx 1$,
+- far from RF coverage, $\beta(x,y) \rightarrow 0$.
+
+This strategy preserves the gravity-driven character of the inversion beneath areas that lack RF measurements while progressively increasing seismic control over areas including RF stations.
+
 ---
 
 ### 1.4 Fourier-Domain Filtering of RF Constraints
