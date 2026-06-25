@@ -7,19 +7,21 @@
 Receiver Function data provide localized seismic estimates of crustal thickness at sparse continental stations. For each RF station \(S_{i}\), a residual between the observed seismic Moho depth and the current gravity-derived Moho model was computed as:
 
 $$
-r_{k} = H_{RF}(s_{k}) - H_{est}(s_{k}) \qquad (1)
+r_{k} = H_{RF}(s_{k}) - H_{est}(s_{k}) 
+\qquad (1)
 $$
 
 where:
 
-- \(H_{RF}(k)\) is the Moho depth estimated from Receiver Functions.  
-- \(H_{est}(k)\) is the Moho depth predicted by the inversion model at each iteration.
+- $H_{RF}(k)$ is the Moho depth estimated from Receiver Functions.  
+- $H_{est}(k)$ is the Moho depth predicted by the inversion model at each iteration.
 
-The model prediction at the RF location \((i,j)\) was obtained through bilinear interpolation of the four neighboring grid nodes:
+The model prediction at the RF location $(i,j)$ was obtained through bilinear interpolation of the four neighboring grid nodes:
 
-\[
-H_{est}^{k}(i,j) = \frac{H(i - 1,j) + H(i + 1,j) + H(i,j + 1) + H(i,j - 1)}{4} \quad (2)
-\]
+$$
+H_{est}^{k}(i,j) = \frac{H(i - 1,j) + H(i + 1,j) + H(i,j + 1) + H(i,j - 1)}{4} 
+\qquad (2)
+$$
 
 where the four terms correspond to the surrounding grid cells.
 
@@ -33,22 +35,24 @@ Because RF observations are sparse and irregularly distributed, direct impositio
 
 To avoid this problem, RF residuals were spatially diffused over the computational grid using isotropic Gaussian kernels.
 
-For each station \(k\), the Gaussian influence function was defined as:
+For each station $k$, the Gaussian influence function was defined as:
 
-\[
-G_{k}(i,j) = e^{\frac{-d_{k}^{2}}{2\sigma^{2}}} \quad (3)
-\]
+$$
+G_{k}(i,j) = e^{\frac{-d_{k}^{2}}{2\sigma^{2}}} 
+\qquad (3)
+$$
 
 where:
 
-- \(d_{k}\) is the distance between the grid node \((x,y)\) and the RF station,  
-- \(\sigma\) controls the spatial influence radius of the station.
+- $d_{k}$ is the distance between the grid node $(x,y)$ and the RF station,  
+- $\sigma$ controls the spatial influence radius of the station.
 
 The continuous residual field was then obtained through weighted averaging:
 
-\[
-R(x,y) = \sum_{k = 1}^{N_{RF}} \frac{r_k G_k(x,y)}{G_k(x,y)} \quad (4)
-\]
+$$
+R(x,y) = \sum_{k = 1}^{N_{RF}} \frac{r_k G_k(x,y)}{G_k(x,y)} 
+\qquad (4)
+$$
 
 This formulation produces a smooth residual correction field while preserving the local character of the seismic information.
 
@@ -60,31 +64,34 @@ The Gaussian diffusion additionally acts as a natural low-pass spatial regulariz
 
 A critical aspect of the inversion concerns the geographical distribution of RF stations. In the present dataset, RF observations are concentrated almost exclusively within continental regions, whereas oceanic domains contain little or no seismic control. Without additional weighting, Gaussian diffusion alone would artificially propagate continental seismic corrections into adjacent oceanic regions, where the unconstrained gravity inversion already provides reliable Moho estimates.
 
-To prevent this effect, a spatially adaptive confidence function \(\beta (x,y)\) was introduced.
+To prevent this effect, a spatially adaptive confidence function $\beta (x,y)$ was introduced.
 
 First, a local RF influence field was computed as:
 
-\[
-W_{RF}(x,y) = \sum_{k = 1}^{N_{RF}} G_k(x,y) \quad (5)
-\]
+$$
+W_{RF}(x,y) = \sum_{k = 1}^{N_{RF}} G_k(x,y) 
+\qquad (5)
+$$
 
 This quantity measures the cumulative proximity of RF stations to each grid node.
 
 The field was subsequently normalized:
 
-\[
-W_{N}(x,y) = \frac{W_{RF}(x,y)}{\max(W_{RF})} \quad (6)
-\]
+$$
+W_{N}(x,y) = \frac{W_{RF}(x,y)}{\max(W_{RF})} 
+\qquad (6)
+$$
 
 The final confidence weighting function was then defined as:
 
-\[
-\beta (x,y) = [W_N(x,y)]^\gamma \quad (7)
-\]
+$$
+\beta (x,y) = [W_N(x,y)]^\gamma 
+\qquad (7)
+$$
 
-where \(\gamma > 1\) controls the spatial localization of the RF influence.
+where $\gamma > 1$ controls the spatial localization of the RF influence.
 
-Increasing \(\gamma\) produces a more rapid decay of RF influence away from seismic stations, effectively confining the seismic constraint to continental domains directly supported by RF observations.
+Increasing $\gamma$ produces a more rapid decay of RF influence away from seismic stations, effectively confining the seismic constraint to continental domains directly supported by RF observations.
 
 ---
 
@@ -92,38 +99,42 @@ Increasing \(\gamma\) produces a more rapid decay of RF influence away from seis
 
 The RF correction field was mirror-extended prior to Fourier transformation to reduce edge discontinuities and minimize spectral leakage. The mirrored field was then transformed into the spectral domain using a two-dimensional FFT:
 
-\[
-R_{RF}(k_{x},k_{y}) = \mathcal{F}\{R_{RF}(x,y)\} \quad (9)
-\]
+$$
+R_{RF}(k_{x},k_{y}) = \mathcal{F}\{R_{RF}(x,y)\}
+\qquad (9)
+$$
 
 To ensure that RF constraints only affected regional and long-wavelength Moho structure, a Gaussian low-pass filter was applied in the wavenumber domain:
 
-\[
-F(k_{x},k_{y}) = e^{\left(\frac{k}{k_{c}}\right)^{2}} \quad (10)
-\]
+$$
+F(k_{x},k_{y}) = e^{\left(\frac{k}{k_{c}}\right)^{2}} 
+\qquad (10)
+$$
 
 where:
 
-- \(k^{2} = k_{x}^{2} + k_{y}^{2}\), and  
-- \(k_{c} = 2\pi / \lambda_{c}\) with \(\lambda_{c}\) representing the characteristic cutoff wavelength.
+- $k^{2} = k_{x}^{2} + k_{y}^{2}$, and  
+- $k_{c} = 2\pi / \lambda_{c}$ with $\lambda_{c}$ representing the characteristic cutoff wavelength.
 
-Typical values adopted in this study ranged between 250 and \(400\,\text{km}\), consistent with the expected coherence length of regional Moho structure resolved by RF observations.
+Typical values adopted in this study ranged between 250 and $400\,\text{km}$, consistent with the expected coherence length of regional Moho structure resolved by RF observations.
 
 The filtered RF contribution was finally expressed as:
 
-\[
-R_{RF}^{f}(k_{x},k_{y}) = \lambda_{RF} \, F(k_{x},k_{y}) \, R_{RF}(k_{x},k_{y}) \quad (11)
-\]
+$$
+R_{RF}^{f}(k_{x},k_{y}) = \lambda_{RF} \  F(k_{x},k_{y}) \  R_{RF}(k_{x},k_{y}) 
+\qquad (11)
+$$
 
-where \(\lambda_{RF}\) controls the global amplitude of the RF constraint relative to the gravity residual term.
+where $\lambda_{RF}$ controls the global amplitude of the RF constraint relative to the gravity residual term.
 
 ---
 
 ### 1.5 Final Constrained Inversion Equation
 
-\[
-H_{n + 1}(k_{x},k_{y}) = H_{n}(k_{x},k_{y}) + P(k_{x},k_{y}) \left[ R_{g}(k_{x},k_{y}) + R_{RF}^{f}(k_{x},k_{y}) \right] \quad (12)
-\]
+$$
+H_{n + 1}(k_{x},k_{y}) = H_{n}(k_{x},k_{y}) + P(k_{x},k_{y}) \left[ R_{g}(k_{x},k_{y}) + R_{RF}^{f}(k_{x},k_{y}) \right] 
+\qquad (12)
+$$
 
 This formulation combines gravity and seismic information within a unified spectral inversion framework while preserving numerical stability and FFT efficiency.
 
