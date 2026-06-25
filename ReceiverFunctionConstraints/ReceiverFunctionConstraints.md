@@ -1,6 +1,6 @@
 ## Receiver Function Constraints in Spectral Gravity Inversion  
-
-This file is written by Marco Ligi
+---
+-- This document is originally written by **Marco Ligi**  
 
 ### 1.1 Receiver Function Residuals
 
