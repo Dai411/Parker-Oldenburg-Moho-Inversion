@@ -1,6 +1,6 @@
-# parker_oldenburg_inversion_final.py
+# p-o_inversion_v1.py
 """
-Parker-Oldenburg 迭代反演 Moho 深度 (最终修正版 - 含弹性挠曲)
+Parker-Oldenburg 迭代反演 Moho 深度 (含弹性挠曲)
 基于测试验证的正演公式 (exp(-K*z0) 版本)
 
 参考文献:
