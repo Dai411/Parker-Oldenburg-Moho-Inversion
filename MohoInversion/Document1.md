@@ -92,7 +92,7 @@ $$
 B(k) = 
 \begin{cases}
 1, & |k| \leq k_{\text{low}} \\
-\frac{1}{2} \left[ 1 + \cos \left( \pi \frac{|k| - k_{\text{low}}}{k_{\text{high}} - k_{\text{low}}} \right) \right], & k_{\text{low}} < |k| < k_{\text{high}} \\
+\frac{1}{2} [ 1 + \cos t( \pi \frac{|k| - k_{\text{low}}}{k_{\text{high}} - k_{\text{low}}} ], & k_{\text{low}} < |k| < k_{\text{high}} \\
 0, & |k| \geq k_{\text{high}}
 \end{cases} 
 \qquad(9)
