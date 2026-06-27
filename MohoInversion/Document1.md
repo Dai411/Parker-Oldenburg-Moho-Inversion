@@ -42,7 +42,8 @@ $$
 The full nonlinear solution is obtained iteratively:
 
 $$
-h^{(n)}(k) = h^{(1)}(k) - \sum_{m=2}^{\infty} \frac{|k|^{m-1}}{m!} \mathcal{F} \left\{ h^{(n-1)}(x,y)^{m} \right\} \tag{4}
+h^{(n)}(k) = h^{(1)}(k) - \sum_{m=2}^{\infty} \frac{|k|^{m-1}}{m!} \mathcal{F} { h^{(n-1)}(x,y)^{m} } 
+\qquad(4)
 $$
 
 ---
