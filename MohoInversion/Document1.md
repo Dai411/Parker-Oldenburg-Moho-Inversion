@@ -53,19 +53,22 @@ $$
 The flexural response of the lithosphere is governed by:
 
 $$
-D(x,y) \nabla^{4} h + \lambda h = q(x,y) \tag{5}
+D(x,y) \nabla^{4} h + \lambda h = q(x,y) 
+\qquad(5)
 $$
 
 With flexural rigidity:
 
 $$
-D(x,y) = \frac{E T_{e}(x,y)^{3}}{12(1 - \nu^{2})} \tag{6}
+D(x,y) = \frac{E T_{e}(x,y)^{3}}{12(1 - \nu^{2})} 
+\qquad(6)
 $$
 
 In Fourier domain:
 
 $$
-h(k) = - \frac{g(k) e^{|k|z_0} + F(k)}{C + D |k|^{4} + \lambda} \tag{7}
+h(k) = - \frac{g(k) e^{|k|z_0} + F(k)}{C + D |k|^{4} + \lambda} 
+\qquad(7)
 $$
 
 ---
@@ -75,7 +78,8 @@ $$
 The effective elastic thickness is modelled as:
 
 $$
-T_{e}(x,y) = T_{e0} \left( 1 + a \, h(x,y) \right) \tag{8}
+T_{e}(x,y) = T_{e0} \left( 1 + a \, h(x,y) \right) 
+\qquad(8)
 $$
 
 ---
@@ -90,7 +94,8 @@ B(k) =
 1, & |k| \leq k_{\text{low}} \\
 \frac{1}{2} \left[ 1 + \cos \left( \pi \frac{|k| - k_{\text{low}}}{k_{\text{high}} - k_{\text{low}}} \right) \right], & k_{\text{low}} < |k| < k_{\text{high}} \\
 0, & |k| \geq k_{\text{high}}
-\end{cases} \tag{9}
+\end{cases} 
+\qquad(9)
 $$
 
 ---
@@ -100,7 +105,8 @@ $$
 The misfit is defined as:
 
 $$
-\epsilon = \frac{\| g_{\text{obs}} - g_{\text{calc}} \|_2}{\| g_{\text{obs}} \|_2} \tag{10}
+\epsilon = \frac{\| g_{\text{obs}} - g_{\text{calc}} \|_2}{\| g_{\text{obs}} \|_2} 
+\qquad(10)
 $$
 
 The iteration stops when $\epsilon < \epsilon_{0}$.
