@@ -131,5 +131,5 @@ Each iteration consists of:
 The estimated Moho depth is obtained as:
 
 $$
-h(x,y) = \mathcal{F}^{-1} \left\{ h(k) \right\}
+h(x,y) = \mathcal{F}^{-1} { h(k) }
 $$
