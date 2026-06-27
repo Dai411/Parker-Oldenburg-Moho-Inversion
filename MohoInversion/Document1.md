@@ -24,13 +24,15 @@ Where $\mathcal{F}$ denotes the 2-dimensional Fourier transform.
 The classic linearized solution in Fourier domain is:
 
 $$
-h^{(1)}(k) = - \frac{g(k) e^{|k|z_0}}{2\pi G \Delta \rho} \tag{2}
+h^{(1)}(k) = - \frac{g(k) e^{|k|z_0}}{2\pi G \Delta \rho} 
+\qquad(2)
 $$
 
 Defining $C = 2\pi G \Delta \rho$:
 
 $$
-h^{(1)}(k) = - \frac{g(k) e^{|k|z_0}}{C} \tag{3}
+h^{(1)}(k) = - \frac{g(k) e^{|k|z_0}}{C} 
+\qquad(3)
 $$
 
 ---
