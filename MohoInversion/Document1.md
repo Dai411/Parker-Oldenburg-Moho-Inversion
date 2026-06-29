@@ -128,4 +128,6 @@ Each iteration consists of:
 
 ### Final Model
 
-The estimated Moho depth is obtained as: $h(x,y) = \mathcal{F}^{-1} { h(k) }$
+The estimated Moho depth is obtained as: $h(x,y) = \mathcal{F}^{-1} \{ h(k) \}$
+
+
