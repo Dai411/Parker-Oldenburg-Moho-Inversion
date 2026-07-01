@@ -901,7 +901,7 @@ If you use this workflow in research, please cite:
 
 ---
 
-**Last Updated:** July 2024  
+**Last Updated:** July 2026  
 **Version:** v4.0 (RF-constrained iterative inversion)  
 **Status:** ✓ Tested and operational
 
